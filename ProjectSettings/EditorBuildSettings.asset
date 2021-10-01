@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Overworld.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Menu Scenes/Instructions.unity
+    guid: eb3a8b548118dec44928a739cbdb785c
+  - enabled: 1
+    path: Assets/Scenes/Menu Scenes/MainMenu.unity
+    guid: 6f1f02813a60bf94f944d323b501e102
+  - enabled: 1
+    path: Assets/Scenes/Menu Scenes/Credits.unity
+    guid: ea75c76375ca20d41be6c08919f735ff
+  - enabled: 1
+    path: Assets/Scenes/Menu Scenes/Settings.unity
+    guid: 25eb1482b6aceeb41a2106f0e874f705
   m_configObjects: {}
