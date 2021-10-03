@@ -6580,6 +6580,25 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5755841317687237200, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
   m_PrefabInstance: {fileID: 5755841317317524607}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1786357296
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786357295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d0ecb0f481f1a7c40bd8b12cf1cd45c2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &1786357297 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5755841317687237198, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
@@ -39386,10 +39405,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1831886340586195951, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
-      propertyPath: health
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5755841317687237198, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -39434,9 +39449,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5755841317687237199, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5755841317687237200, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 733778178284015367, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
