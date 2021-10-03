@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2480451656422773964}
   - component: {fileID: 1786357296}
   - component: {fileID: 1831886340586195951}
-  - component: {fileID: 733778178284015367}
+  - component: {fileID: 2438290288612180370}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  pauseCanvas: {fileID: 0}
 --- !u!50 &2480451656422773964
 Rigidbody2D:
   serializedVersion: 4
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   maxHealth: 5
---- !u!95 &733778178284015367
+--- !u!95 &2438290288612180370
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ Animator:
   m_GameObject: {fileID: 5755841317687237200}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 72d7c0fcdc5cc5a40b35c126e72f80e4, type: 2}
+  m_Controller: {fileID: 9100000, guid: d0ecb0f481f1a7c40bd8b12cf1cd45c2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
