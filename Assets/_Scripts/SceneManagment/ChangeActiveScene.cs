@@ -12,6 +12,8 @@ public class ChangeActiveScene : MonoBehaviour
     //loads a new base scene
     public void ChangeScene()
     {
+
+        Time.timeScale = 1f;
         SceneManager.LoadScene(newSceneName, LoadSceneMode.Single);
     }
 
@@ -19,6 +21,7 @@ public class ChangeActiveScene : MonoBehaviour
     //loads a Scene which appears in the Hierarchy window while another is active.      <-stolen documentation from the Unity wiki at https://docs.unity3d.com/ScriptReference/SceneManagement.LoadSceneMode.html
     public void AddAdditiveScene()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(newSceneName, LoadSceneMode.Additive);
     }
 }

@@ -27,11 +27,13 @@ public class PlayerController : MonoBehaviour
     {
         // save functionality here . . .
 
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
     public void OnExitWithoutSaving()
     {
 
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
     public void ResumeGame()
