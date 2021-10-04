@@ -1,0 +1,4 @@
+https://answers.unity.com/questions/1250052/set-the-ui-image-to-fit-screen-size.html
+	Some guy named Mukabr for scaling a UI image to screen dimensions
+https://answers.unity.com/questions/994033/how-do-i-create-a-exitquit-button.html
+	 zach-r-d for exit game from script
