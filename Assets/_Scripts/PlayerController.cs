@@ -16,9 +16,13 @@ public class PlayerController : MonoBehaviour
     public Canvas pauseCanvas;
     bool isPaused = false;
 
+
+    public Animator cinemachineAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
+
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();    
     }
@@ -80,6 +84,7 @@ public class PlayerController : MonoBehaviour
                 pauseCanvas.gameObject.SetActive(false);
 
             }
+
 
             //Debug.Log("lateral: " + lateralSpeed.ToString());
 

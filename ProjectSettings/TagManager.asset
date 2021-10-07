@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Post_Process
   - 
   - 
   - 
@@ -55,4 +55,7 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 3758603995
+    locked: 0
+  - name: Encounter
+    uniqueID: 2591731055
     locked: 0
