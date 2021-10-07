@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Encounter : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Cinemachine.CinemachineVirtualCamera camera;
+    public Animator crossfadeTransition;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        //GetComponent<Cinemachine.CinemachineTriggerAction>().
+
+        // change priority of the encounter camera
+
+        camera.Priority += 2;
+        crossfadeTransition.SetTrigger("Start");
     }
 }
