@@ -7,7 +7,6 @@ public class Encounter : MonoBehaviour
 {
     public Cinemachine.CinemachineVirtualCamera camera;
     public Animator crossfadeTransition;
-    public Canvas battleCanvas;
     
     void Start()
     {
@@ -23,8 +22,10 @@ public class Encounter : MonoBehaviour
         camera.Priority += 2;
         crossfadeTransition.SetTrigger("Start");
 
-        battleCanvas.gameObject.SetActive(true);
     }
-
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        camera.Priority -= 2;
+    }
 
 }

@@ -4146,7 +4146,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 1393103829}
   crossfadeTransition: {fileID: 915498168075303829}
-  battleCanvas: {fileID: 1797629489}
 --- !u!1 &402480258
 GameObject:
   m_ObjectHideFlags: 0
@@ -7048,10 +7047,10 @@ RectTransform:
   m_Father: {fileID: 915498168075303912}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -828.5, y: 0}
-  m_SizeDelta: {x: 1107, y: 520}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -843.75, y: 0}
+  m_SizeDelta: {x: 38.5, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1412481781
 MonoBehaviour:
@@ -7120,7 +7119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1527757153
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7356,10 +7355,10 @@ RectTransform:
   m_Father: {fileID: 915498168075303912}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 827, y: 0}
-  m_SizeDelta: {x: 1098, y: 520}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 845.50006, y: 0}
+  m_SizeDelta: {x: 34.99994, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1716079222
 CanvasGroup:
@@ -7492,7 +7491,7 @@ GameObject:
   - component: {fileID: 1797629488}
   - component: {fileID: 1797629487}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: BattleUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40429,6 +40428,7 @@ GameObject:
   - component: {fileID: 915498168075303914}
   - component: {fileID: 915498168075303915}
   - component: {fileID: 915498168075303829}
+  - component: {fileID: 915498168075303830}
   m_Layer: 5
   m_Name: PlayerUICanvas
   m_TagString: Untagged
@@ -40455,6 +40455,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &915498168075303830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915498168075303828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5231269774b27f745afaeb62ecbad586, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  encounterCanvas: {fileID: 1797629489}
 --- !u!224 &915498168075303912
 RectTransform:
   m_ObjectHideFlags: 0

@@ -5,3 +5,6 @@ https://answers.unity.com/questions/994033/how-do-i-create-a-exitquit-button.htm
 
 https://www.youtube.com/watch?v=Ri8PEbD4w8A
 	Camera transition
+
+	https://docs.unity3d.com/Manual/script-AnimationWindowEvent.html
+	https://www.youtube.com/watch?v=CE9VOZivb3I&t=620s
