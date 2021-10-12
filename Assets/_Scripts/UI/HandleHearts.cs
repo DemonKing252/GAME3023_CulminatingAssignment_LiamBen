@@ -18,7 +18,7 @@ public class HandleHearts : MonoBehaviour
     GameObject heart3;
     [SerializeField]
     GameObject heart4;
-    int playerHealth;
+    float playerHealth;
 
 
     // Start is called before the first frame update
@@ -36,7 +36,7 @@ public class HandleHearts : MonoBehaviour
 
     void UpdatePlayerHealth()
     {
-        playerHealth = playerRef.GetComponent<PlayerHealth>().GetHealth();
+        playerHealth = playerRef.GetComponent<CombatAttributes>().GetHealth();
         HandleHeartImages();
     }
 

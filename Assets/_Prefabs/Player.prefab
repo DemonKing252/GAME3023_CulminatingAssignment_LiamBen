@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2823164296732316096}
   - component: {fileID: 2480451656422773964}
   - component: {fileID: 1786357296}
-  - component: {fileID: 1831886340586195951}
   - component: {fileID: 2438290288612180370}
+  - component: {fileID: 5346572897469620950}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   pauseCanvas: {fileID: 0}
+  cinemachineAnimator: {fileID: 0}
 --- !u!50 &2480451656422773964
 Rigidbody2D:
   serializedVersion: 4
@@ -148,20 +149,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1831886340586195951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5755841317687237200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2d9c9c873d463c4093f69233116fc37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 3
-  maxHealth: 5
 --- !u!95 &2438290288612180370
 Animator:
   serializedVersion: 3
@@ -181,3 +168,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5346572897469620950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5755841317687237200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 3
+  maxHealth: 5
+  healthPassiveRegen: 0.25
+  healAmount: 1
+  likelihoodOfDodgeAttack: 0.3
+  likelihoodOfReceivedCriticalHit: 0.1
+  criticalHitReceivedMultiplier: 1.5
+  damageDealNormal: 1
+  damageDealSpecial: 2
+  likelihoodOfFleeing: 0.1
+  thresholdForFleeing: 0.5
+  deathMessage: ' have died!'
+  damageDealNormalMessage: ' have attacked!'
+  damageDealSpecialMessage: ' have used Special attack!'
+  healMessage: ' are healing!'
+  criticalHitMessage: ' have recieved a Critical Hit!'
+  fleeFailedMessage: ' have tried to run away, but failed!'
+  fleeSuccessMessage: ' have run away!'
