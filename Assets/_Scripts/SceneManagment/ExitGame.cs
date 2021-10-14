@@ -6,7 +6,12 @@ public class ExitGame : MonoBehaviour
 {
     public void ShutdownGame()
     {
+#if UNITY_EDITOR
+        // Editor mode
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // Build mode
         Application.Quit();
-        Debug.Log("Game should shut down now. Doesn't work in editor.");
+#endif
     }
 }
