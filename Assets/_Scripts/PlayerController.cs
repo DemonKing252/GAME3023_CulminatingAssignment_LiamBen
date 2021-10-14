@@ -22,21 +22,35 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();    
+        rb = GetComponent<Rigidbody2D>();
+
+        switch (PlayerPreference.load)
+        {
+            case LoadType.NewGame:
+                GameDataManager.Instance.ClearAllPlayerPrefs();
+                break;
+            case LoadType.ResumeGame:
+                GameDataManager.Instance.LoadGame();
+                break;
+        }
+
     }
 
     public void OnSaveAndQuit()
     {
         // save functionality here . . .
 
+        GameDataManager.Instance.SaveGame();
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
     public void OnExitWithoutSaving()
     {
+        // skip saving the game
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");

@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
+public enum LoadType
+{
+    Default = 0,
+    NewGame = 1,
+    ResumeGame = 2
+}
+
 public class ChangeActiveScene : MonoBehaviour
 {
     [SerializeField]
     //name of next scene to load        --why is there no inspector ref to a scene in Unity?
     public string newSceneName;
+    public LoadType pref;
 
     //loads a new base scene
     public void ChangeScene()
@@ -15,6 +24,8 @@ public class ChangeActiveScene : MonoBehaviour
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(newSceneName, LoadSceneMode.Single);
+
+        PlayerPreference.load = pref;    
     }
 
 
