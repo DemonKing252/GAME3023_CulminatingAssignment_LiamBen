@@ -25,23 +25,26 @@ public class UIAnimationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Refresh();
+    
+    }
+    public void Refresh()
+    {
         timestart = Time.time;
         img = GetComponent<Image>();
-        
+
         if (method == SpriteLoadBy.SpriteSheet)
             sprites = Resources.LoadAll<Sprite>(path);
         else
         {
             sprites = new Sprite[paths.Length];
-            
-            for(int i = 0; i < sprites.Length; i++)
+
+            for (int i = 0; i < sprites.Length; i++)
             {
                 sprites[i] = Resources.Load<Sprite>(paths[i]);
             }
         }
-    
     }
-
 
     private float timestart = 0f;
     // Update is called once per frame

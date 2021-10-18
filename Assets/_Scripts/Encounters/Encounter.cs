@@ -7,7 +7,10 @@ public class Encounter : MonoBehaviour
 {
     public Cinemachine.CinemachineVirtualCamera camera;
     public Animator crossfadeTransition;
-    
+
+    public List<Enemy> enemies;
+    public GameObject enemyUI;
+
     void Start()
     {
         
@@ -19,9 +22,19 @@ public class Encounter : MonoBehaviour
 
         // change priority of the encounter camera
 
+
+        ChooseRandomEnemy();
         camera.Priority += 2;
         crossfadeTransition.SetTrigger("Start");
 
+    }
+
+    public void ChooseRandomEnemy()
+    {
+        int _rand = Random.Range(0, enemies.Count); // end is inclusive so its fine.
+        enemyUI.GetComponent<UIAnimationController>().path = enemies[_rand].path;
+        enemyUI.GetComponent<UIAnimationController>().Refresh();
+        
     }
     void OnTriggerExit2D(Collider2D collision)
     {
