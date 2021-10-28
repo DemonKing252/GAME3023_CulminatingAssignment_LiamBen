@@ -67,6 +67,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // Example
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            DialogueManager.GetInstance().StartNewDialogue("Hello, World!", 0.05f);
+        }
+
         // Add to Diary: Didn't realize that delta time was already used in velocity 
 
         var horiz = Input.GetAxisRaw("Horizontal");
