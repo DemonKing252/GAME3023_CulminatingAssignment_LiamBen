@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CombatAttributes : MonoBehaviour
 {
-
+    [SerializeField]
     protected string entityName = "ParentEntity";   //name of this entity
 
     #region healthVars
@@ -135,4 +135,9 @@ public class CombatAttributes : MonoBehaviour
         else return true;
     }
     #endregion
+
+    public string GetName()
+    {
+        return entityName;
+    }
 }

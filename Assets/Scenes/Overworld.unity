@@ -123,12 +123,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &5530268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4451487103096488225, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
+  m_PrefabInstance: {fileID: 935885466}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5530270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: Amogus
+  health: 3
+  maxHealth: 3
+  healthPassiveRegen: 0.25
+  healAmount: 1
+  likelihoodOfDodgeAttack: 0.3
+  likelihoodOfReceivedCriticalHit: 0.2
+  criticalHitReceivedMultiplier: 1.5
+  damageDealNormal: 1
+  damageDealSpecial: 2
+  likelihoodOfFleeing: 0.1
+  thresholdForFleeing: 0.5
+  deathMessage: ' has died!'
+  damageDealNormalMessage: ' has attacked!'
+  damageDealSpecialMessage: ' has used Special attack!'
+  healMessage: ' is healing!'
+  criticalHitMessage: ' has recieved a Critical Hit!'
+  fleeFailedMessage: ' has tried to run away, but failed!'
+  fleeSuccessMessage: ' has run away!'
 --- !u!114 &11458396 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4451487103096488238, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
   m_PrefabInstance: {fileID: 935885466}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5530268}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00512ae5ef9976140b47513cd26eaf9e, type: 3}
@@ -4989,6 +5025,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &548843360 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5873259968725361460, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+  m_PrefabInstance: {fileID: 1037048599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &548843364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548843360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c898afb32d9b8964383e7351b6c288eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameObjectWithName: {fileID: 5530268}
+  nameOfGameObject: 
 --- !u!1 &579056203
 GameObject:
   m_ObjectHideFlags: 0
@@ -5662,8 +5717,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5817161885666034589, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5817161885666034589, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+      propertyPath: playerRef
+      value: 
+      objectReference: {fileID: 5530268}
     - target: {fileID: 5817161885687140484, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5806,13 +5865,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873259968725361462, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_text
-      value: 'The Dreaded Amogus
+      value: 'Noname
 
 '
       objectReference: {fileID: 0}
     - target: {fileID: 5873259968725361462, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_fontSize
-      value: 10.65
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5873259968725361462, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_margin.z
