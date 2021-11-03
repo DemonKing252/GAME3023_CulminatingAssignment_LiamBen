@@ -282,6 +282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109106046}
   - component: {fileID: 109106045}
+  - component: {fileID: 109106047}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -326,6 +327,19 @@ Transform:
   m_Father: {fileID: 1797629490}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109106047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109106044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a46c2f7150d1d4408772ff6515ef25f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyRef: {fileID: 5530268}
 --- !u!114 &136064692 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
@@ -5613,6 +5627,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5530270, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
+      propertyPath: successFleeingChance
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 4451487103096488225, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
       propertyPath: m_Name
       value: VRGuy_0
@@ -8832,8 +8850,9 @@ MonoBehaviour:
   criticalHitReceivedMultiplier: 1.5
   damageDealNormal: 1
   damageDealSpecial: 2
-  likelihoodOfFleeing: 0.1
+  likelihoodOfChoosingFlee: 0.3
   thresholdForFleeing: 0.5
+  successFleeingChance: 0.25
   deathMessage: ' has died!'
   damageDealNormalMessage: ' has attacked!'
   damageDealSpecialMessage: ' has used Special attack!'
@@ -42202,6 +42221,10 @@ PrefabInstance:
       propertyPath: pauseCanvas
       value: 
       objectReference: {fileID: 694349178}
+    - target: {fileID: 5346572897469620950, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
+      propertyPath: successFleeingChance
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5755841317687237198, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
       propertyPath: m_RootOrder
       value: 4

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour
 {
     #region references
+    [Header("Refs")]
     [SerializeField]
     private GameObject playerRef;
 
@@ -37,26 +38,31 @@ public class BattleManager : MonoBehaviour
     private GameObject dialogBox;
     #endregion
 
+
     [SerializeField]
     private float waitTimeForEnemyTurn = 1.5f;
 
     private bool playerTurn = true;
 
-
+    private bool inBattle = true;
 
 
 
     void Start()
     {
+        //first off, disable the player's overworld hearts UI
         overworldGameGUI.gameObject.SetActive(false);
         
     }
 
-    void ShutdownBattle()
+    public void ShutdownBattle()
     {
+        StopAllCoroutines();  //stop all coroutines (timer for enemy)
         Debug.Log("battle scene should close here!");
+        inBattle = false;   //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
         enemyImage.enabled = false; //stop rendering enemy image
         enemyStatsCanvas.SetActive(false);  //stop rendering enemy stats canvas
+        SetPlayerButtonsClickable(false);   //disable buttons clicability
     }
 
     void SetPlayerButtonsClickable(bool newClickableState)
@@ -82,14 +88,22 @@ public class BattleManager : MonoBehaviour
         playerTurn = false;
         SetPlayerButtonsClickable(false);
 
-        //add a little wait to enemy's actions are not instantanious
-        yield return new WaitForSeconds(waitTimeForEnemyTurn);
+        if (!inBattle) yield break; //if no longer in a battle, return. Stuff before this line would have to happen both for ending turn and ending the battle
 
-        //tell the enemy to make its turn here
+        //add a little wait to enemy's actions so they're not instantanious
+                    //NOTE: this is so dumb. If enemy successfully flees, I need the coroutine to stop and the shutdown func to start. However the enemy flee check completes AFTER the SetPlayerButtonsClickable() func completes if placed WaitForSeconds->EnemyRespond.
+                    //If the Enemy response is done before the wait with EnemyRespond->WaitForSeconds, then we'd have to store the result of the enemy's descision(flee success, flee fail, attack, etc) and then apply it after the wait finished. But if we split the wait so the enemy
+                    //flee check ALWAYS completes BEFORE both waits finish, we can skip having to add a delayed application of the enemy's descision.
+                    //This is a temporary duct tape fix and I know it will make Joss cry.
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.5f);
+        GetComponent<EnemyResponse>().EnemyRespond();   //tell enemy to take its turn. If flee chosen and succeeds then only 90% of wait time will have been allowed to pass. Otherwise 100% will have been allowed to pass.
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.5f);
+        
 
-        //players turn once again! set bool accordingly and re-enable buttons
+        //player's turn once again! set bool accordingly and re-enable buttons
         playerTurn = true;
         SetPlayerButtonsClickable(true);
+
     }
     public void PlayerInputAttack()
     {
@@ -113,6 +127,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
+        Debug.Log("player heals");
         playerRef.GetComponent<CombatAttributes>().IncreaseHealth(playerRef.GetComponent<CombatAttributes>().GetHealAmount());  //heal player by their determined heal amount
 
         StartCoroutine(FinishPlayerTurn());
@@ -123,8 +138,22 @@ public class BattleManager : MonoBehaviour
         if (!playerTurn) return; //quick failsafe
 
 
-        Debug.Log("player flees");
+        Debug.Log("player attempts to flee");
+        PlayerAttemptFlee();
         StartCoroutine(FinishPlayerTurn());
     }
 
+    private void PlayerAttemptFlee()     //player attempts to flee. Returns true if attempt succeeded, false if attempt failed.
+    {
+
+        if (Random.Range(0.0f, 1.0f) <= playerRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
+        {
+            Debug.Log("Player escaped");
+            ShutdownBattle();     //stop the battle immediately
+        }
+        else
+        {
+            Debug.Log("Player failed to escape");
+        }
+    }
 }

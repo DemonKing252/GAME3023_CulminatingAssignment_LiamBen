@@ -47,20 +47,38 @@ public class CombatAttributes : MonoBehaviour
         return damageDealNormal;
     }
 
-    public float GetDamageDealSpoecial()
+    public float GetDamageDealSpecial()
     {
         return damageDealSpecial;
     }
     #endregion
 
-    #region fleeVars
+    #region fleeManagment
     [Header("Fleeing Vars")]
     //may want to move these to a enemy-only child class, unless we want the player to only be able to flee if injured
     [SerializeField]
-    protected float likelihoodOfFleeing = 0.1f;   //how likely it is the entity will attempt to flee (>= 1 for always, <= 0 for never)
+    protected float likelihoodOfChoosingFlee = 0.3f;   //how likely it is the entity will attempt to flee assuming the option is available (>= 1 for always, <= 0 for never)
 
     [SerializeField]
     protected float thresholdForFleeing = 0.5f;     //how little health entity will require before the option to flee becomes available.
+
+    [SerializeField]
+    protected float successFleeingChance = 0.25f;   //how likely it is the entity will sucessfully flee and end the battle (>= 1 for always, <= 0 for never)
+
+    public float GetLikelihoodOfChoosingFlee()
+    {
+        return likelihoodOfChoosingFlee;
+    }
+
+    public float GetThresholdForFleeing()
+    {
+        return thresholdForFleeing; 
+    }
+
+    public float GetSuccessFleeingChance()
+    {
+        return successFleeingChance;
+    }
     #endregion
 
     #region messageSuffixVars
@@ -142,6 +160,11 @@ public class CombatAttributes : MonoBehaviour
         return health;
     }
 
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
     public bool GetIsAtFullHealth()
     {
         if (health == maxHealth) return true;
@@ -151,14 +174,6 @@ public class CombatAttributes : MonoBehaviour
     public float GetHealAmount()
     {
         return healAmount;
-    }
-    #endregion
-
-    #region fleeManagment
-    public bool allowFleeing()
-    {
-        if (health > (health * thresholdForFleeing)) return false;
-        else return true;
     }
     #endregion
 
