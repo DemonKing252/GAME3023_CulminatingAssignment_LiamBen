@@ -8,7 +8,7 @@ public class GetName : MonoBehaviour
     [SerializeField]
     GameObject gameObjectWithName;
 
-    public string nameOfGameObject;
+    private string nameOfGameObject;
 
     // Start is called before the first frame update
     void Start()

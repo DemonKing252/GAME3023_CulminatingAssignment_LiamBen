@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4451487103096488239}
   - component: {fileID: 4451487103096488238}
+  - component: {fileID: 5530270}
   m_Layer: 0
   m_Name: VRGuy_0
   m_TagString: Untagged
@@ -45,3 +46,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: VRGuy
   health: 4
+--- !u!114 &5530270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4451487103096488225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: Amogus
+  health: 3
+  maxHealth: 3
+  healthPassiveRegen: 0.25
+  healAmount: 1
+  likelihoodOfDodgeAttack: 0.3
+  likelihoodOfReceivedCriticalHit: 0.2
+  criticalHitReceivedMultiplier: 1.5
+  damageDealNormal: 1
+  damageDealSpecial: 2
+  likelihoodOfFleeing: 0.1
+  thresholdForFleeing: 0.5
+  deathMessage: ' has died!'
+  damageDealNormalMessage: ' has attacked!'
+  damageDealSpecialMessage: ' has used Special attack!'
+  healMessage: ' is healing!'
+  criticalHitMessage: ' has recieved a Critical Hit!'
+  fleeFailedMessage: ' has tried to run away, but failed!'
+  fleeSuccessMessage: ' has run away!'

@@ -41,6 +41,16 @@ public class CombatAttributes : MonoBehaviour
 
     [SerializeField]
     protected float damageDealSpecial = 2.0f;   //how much damage to deal during a special attack (will want to move this to another script for specific abilities)
+
+    public float GetDamageDealNormal()
+    {
+        return damageDealNormal;
+    }
+
+    public float GetDamageDealSpoecial()
+    {
+        return damageDealSpecial;
+    }
     #endregion
 
     #region fleeVars
@@ -90,7 +100,7 @@ public class CombatAttributes : MonoBehaviour
         {
             //player is dead. Set health to 0.
             health = 0;
-            Debug.Log("Player is dead rip");//run some death function here<<<<<<<<<<<<<<<<<<
+            Debug.Log(entityName + " just died rip");//run some death function here<<<<<<<<<<<<<<<<<<
             return false;//return of true also means nothing here.
         }
         else//this only ever runs if health is greater than maxHealth
@@ -101,19 +111,24 @@ public class CombatAttributes : MonoBehaviour
     }
 
     //decrease health by passed amount. Returns true for if alive, false for dead.
-    protected bool DecreaseHealth(float decreaseAmount)
+    public bool DecreaseHealth(float decreaseAmount)
     {
+        if (decreaseAmount <= 0) return true; //exit early is decreseamount is 0 or less. Don't allow negative numbers to be passed.
         health -= decreaseAmount;
-        return ManageHealthBounds();
+        return ManageHealthBounds();    //returns true if this entity is alive, false if dead
     }
 
     //attempts to increase health by the passed Amount. Returns true if the consumable has been picked up and used, false if already at full health.
-    protected bool IncreaseHealth(float incrementAmount)
+    public bool IncreaseHealth(float incrementAmount)
     {
-        //if health is at max, return false disallowing player from consuming health pickup/item
-        if (health == maxHealth) return false;
+        //if health is at max, return false disallowing player from consuming health pickup/item. Do the same if increment amount is 0 or less
+        if (health == maxHealth || incrementAmount <= 0) return false;
+
+        //add passed health amount to health var
         health += incrementAmount;
+        //ensure health is within bounds
         ManageHealthBounds();
+
         return true;
     }
 
@@ -125,6 +140,17 @@ public class CombatAttributes : MonoBehaviour
     public float GetHealth()
     {
         return health;
+    }
+
+    public bool GetIsAtFullHealth()
+    {
+        if (health == maxHealth) return true;
+        else return false;
+    }
+
+    public float GetHealAmount()
+    {
+        return healAmount;
     }
     #endregion
 

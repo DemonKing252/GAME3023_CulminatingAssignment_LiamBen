@@ -128,37 +128,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4451487103096488225, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
   m_PrefabInstance: {fileID: 935885466}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5530270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5530268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityName: Amogus
-  health: 3
-  maxHealth: 3
-  healthPassiveRegen: 0.25
-  healAmount: 1
-  likelihoodOfDodgeAttack: 0.3
-  likelihoodOfReceivedCriticalHit: 0.2
-  criticalHitReceivedMultiplier: 1.5
-  damageDealNormal: 1
-  damageDealSpecial: 2
-  likelihoodOfFleeing: 0.1
-  thresholdForFleeing: 0.5
-  deathMessage: ' has died!'
-  damageDealNormalMessage: ' has attacked!'
-  damageDealSpecialMessage: ' has used Special attack!'
-  healMessage: ' is healing!'
-  criticalHitMessage: ' has recieved a Critical Hit!'
-  fleeFailedMessage: ' has tried to run away, but failed!'
-  fleeSuccessMessage: ' has run away!'
 --- !u!114 &11458396 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4451487103096488238, guid: 23cb2bffe091ac4409c2b0856a692b0f, type: 3}
@@ -289,8 +258,85 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 109106045}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayerInputFlee
+      objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattleManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+--- !u!1 &109106044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 109106046}
+  - component: {fileID: 109106045}
+  m_Layer: 0
+  m_Name: BattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &109106045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109106044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fefb3f2c0a533e45830b87492a35d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRef: {fileID: 1786357295}
+  enemyRef: {fileID: 5530268}
+  enemyImage: {fileID: 1005643124}
+  enemyStatsCanvas: {fileID: 1814977905}
+  playerAttackButton: {fileID: 818377500}
+  playerDodgeButton: {fileID: 1033169415}
+  playerHealButton: {fileID: 136064692}
+  playerFleeButton: {fileID: 2055822654}
+  overworldGameGUI: {fileID: 1912961521}
+  dialogBox: {fileID: 684193635}
+  waitTimeForEnemyTurn: 1.5
+--- !u!4 &109106046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109106044}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 137.85748, y: -32.661728, z: -145.92418}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1797629490}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &136064692 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+  m_PrefabInstance: {fileID: 336435575}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &179629252
 GameObject:
   m_ObjectHideFlags: 0
@@ -4460,6 +4506,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 109106045}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayerInputHeal
+      objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattleManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
 --- !u!224 &338131142 stripped
@@ -4586,6 +4644,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 109106045}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayerInputDodge
+      objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattleManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
 --- !u!1 &372829536
@@ -4619,7 +4689,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1797629490}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.25672612, y: 0.14388137}
   m_AnchorMax: {x: 0.25672612, y: 0.14388137}
@@ -5043,7 +5113,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameObjectWithName: {fileID: 5530268}
-  nameOfGameObject: 
 --- !u!1 &579056203
 GameObject:
   m_ObjectHideFlags: 0
@@ -5334,11 +5403,11 @@ RectTransform:
   - {fileID: 1744027055}
   - {fileID: 579056204}
   m_Father: {fileID: 1797629490}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: -186.7}
+  m_AnchoredPosition: {x: -176.79999, y: -189.25}
   m_SizeDelta: {x: 353.6, y: 93.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &684193637
@@ -5396,6 +5465,17 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 1508786548593216404, guid: 649330d8fd9140a47adfc7c315825225, type: 3}
   m_PrefabInstance: {fileID: 1508786547936962286}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &818377500 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+  m_PrefabInstance: {fileID: 1297110158}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &855705733
 GameObject:
   m_ObjectHideFlags: 0
@@ -5493,7 +5573,7 @@ RectTransform:
   - {fileID: 335202490}
   - {fileID: 318717954}
   m_Father: {fileID: 1797629490}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -5614,7 +5694,7 @@ RectTransform:
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1797629490}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.77054775, y: 0.5}
   m_AnchorMax: {x: 0.77054775, y: 0.5}
@@ -5676,6 +5756,17 @@ MonoBehaviour:
   path: VRGuy
   method: 0
   paths: []
+--- !u!114 &1033169415 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+  m_PrefabInstance: {fileID: 357532671}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1037048599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5723,6 +5814,10 @@ PrefabInstance:
       propertyPath: playerRef
       value: 
       objectReference: {fileID: 5530268}
+    - target: {fileID: 5817161885666034591, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5817161885687140484, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5781,7 +5876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5853,6 +5948,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873259967349803106, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803119, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
@@ -6248,6 +6347,18 @@ PrefabInstance:
     - target: {fileID: 279022457760460553, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 109106045}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayerInputAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattleManager, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
@@ -8508,7 +8619,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1797629490}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -8694,6 +8805,42 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
   m_PrefabInstance: {fileID: 1037048599}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1624329951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3833372221198907421, guid: 2bdea0e3f18f3ec41b8bd7fa19111161, type: 3}
+  m_PrefabInstance: {fileID: 1600090638}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1624329952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624329951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: MaskGuy
+  health: 3
+  maxHealth: 3
+  healthPassiveRegen: 0.25
+  healAmount: 1
+  likelihoodOfDodgeAttack: 0.3
+  likelihoodOfReceivedCriticalHit: 0.2
+  criticalHitReceivedMultiplier: 1.5
+  damageDealNormal: 1
+  damageDealSpecial: 2
+  likelihoodOfFleeing: 0.1
+  thresholdForFleeing: 0.5
+  deathMessage: ' has died!'
+  damageDealNormalMessage: ' has attacked!'
+  damageDealSpecialMessage: ' has used Special attack!'
+  healMessage: ' is healing!'
+  criticalHitMessage: ' has recieved a Critical Hit!'
+  fleeFailedMessage: ' has tried to run away, but failed!'
+  fleeSuccessMessage: ' has run away!'
 --- !u!1 &1694366309
 GameObject:
   m_ObjectHideFlags: 0
@@ -9082,6 +9229,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 109106046}
   - {fileID: 1527757153}
   - {fileID: 372829537}
   - {fileID: 1005643123}
@@ -9097,6 +9245,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1814977905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5873259967349803119, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+  m_PrefabInstance: {fileID: 1037048599}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1847693687
 GameObject:
   m_ObjectHideFlags: 0
@@ -41516,7 +41669,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3833372221198907420, guid: 2bdea0e3f18f3ec41b8bd7fa19111161, type: 3}
   m_PrefabInstance: {fileID: 1600090638}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1624329951}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00512ae5ef9976140b47513cd26eaf9e, type: 3}
@@ -41594,6 +41747,17 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &2055822654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
+  m_PrefabInstance: {fileID: 72004072}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2065790104 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
@@ -42197,7 +42361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -42269,6 +42433,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803104, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873259967349803106, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5873259967349803119, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
