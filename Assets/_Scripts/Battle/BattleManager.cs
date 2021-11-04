@@ -95,9 +95,9 @@ public class BattleManager : MonoBehaviour
                     //If the Enemy response is done before the wait with EnemyRespond->WaitForSeconds, then we'd have to store the result of the enemy's descision(flee success, flee fail, attack, etc) and then apply it after the wait finished. But if we split the wait so the enemy
                     //flee check ALWAYS completes BEFORE both waits finish, we can skip having to add a delayed application of the enemy's descision.
                     //This is a temporary duct tape fix and I know it will make Joss cry.
-        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.5f);
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.9f);
         GetComponent<EnemyResponse>().EnemyRespond();   //tell enemy to take its turn. If flee chosen and succeeds then only 90% of wait time will have been allowed to pass. Otherwise 100% will have been allowed to pass.
-        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.5f);
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.1f);
         
 
         //player's turn once again! set bool accordingly and re-enable buttons
