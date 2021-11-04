@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3833372221198907419}
   - component: {fileID: 3833372221198907420}
+  - component: {fileID: 1624329952}
   m_Layer: 0
   m_Name: MaskGuy
   m_TagString: Untagged
@@ -44,3 +45,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: MaskGuy
+  health: 100
+--- !u!114 &1624329952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3833372221198907421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: MaskGuy
+  health: 3
+  maxHealth: 3
+  healthPassiveRegen: 0.25
+  healAmount: 1
+  likelihoodOfDodgeAttack: 0.3
+  likelihoodOfReceivedCriticalHit: 0.2
+  criticalHitReceivedMultiplier: 1.5
+  damageDealNormal: 1
+  damageDealSpecial: 2
+  likelihoodOfChoosingFlee: 0.3
+  thresholdForFleeing: 0.5
+  successFleeingChance: 0.25
+  deathMessage: ' has died!'
+  damageDealNormalMessage: ' has attacked!'
+  damageDealSpecialMessage: ' has used Special attack!'
+  healMessage: ' is healing!'
+  criticalHitMessage: ' has recieved a Critical Hit!'
+  fleeFailedMessage: ' has tried to run away, but failed!'
+  fleeSuccessMessage: ' has run away!'

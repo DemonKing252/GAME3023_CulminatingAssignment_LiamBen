@@ -24,6 +24,7 @@ public class GameData
 public static class PlayerPreference
 {
     public static LoadType load = LoadType.Default;
+    public static GameObject enemy;
 }
 
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyResponse : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject enemyRef;
+    public GameObject enemyRef;
 
 
     public void EnemyRespond()
