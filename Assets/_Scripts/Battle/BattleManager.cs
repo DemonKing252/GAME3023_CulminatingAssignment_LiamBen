@@ -119,7 +119,9 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
-        Debug.Log("player Dodges");
+
+        DialogueManager.GetInstance().StartNewDialogue("Player Dodges");
+        //Debug.Log("player Dodges");
         StartCoroutine(FinishPlayerTurn());
     }
 
@@ -127,7 +129,8 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
-        Debug.Log("player heals");
+        DialogueManager.GetInstance().StartNewDialogue("Player heals");
+        //Debug.Log("player heals");
         playerRef.GetComponent<CombatAttributes>().IncreaseHealth(playerRef.GetComponent<CombatAttributes>().GetHealAmount());  //heal player by their determined heal amount
 
         StartCoroutine(FinishPlayerTurn());
@@ -138,7 +141,8 @@ public class BattleManager : MonoBehaviour
         if (!playerTurn) return; //quick failsafe
 
 
-        Debug.Log("player attempts to flee");
+        //DialogueManager.GetInstance().StartNewDialogue("Player attempts to flee");
+        //Debug.Log("player attempts to flee");
         PlayerAttemptFlee();
         StartCoroutine(FinishPlayerTurn());
     }
@@ -148,12 +152,15 @@ public class BattleManager : MonoBehaviour
 
         if (Random.Range(0.0f, 1.0f) <= playerRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
         {
-            Debug.Log("Player escaped");
+            DialogueManager.GetInstance().StartNewDialogue("Player escaped");
+            //Debug.Log("Player escaped");
             ShutdownBattle();     //stop the battle immediately
         }
         else
         {
-            Debug.Log("Player failed to escape");
+
+            DialogueManager.GetInstance().StartNewDialogue("Player failed to escape");
+            //Debug.Log("Player failed to escape");
         }
     }
 }

@@ -24,7 +24,9 @@ public class EnemyResponse : MonoBehaviour
         else
         {
             //enemy has too much health to consider fleeing. For now there's no other state/action for it to take so for now the enemy will just sit there patiently
-            Debug.Log("Enemy does nothing");
+            //Debug.Log("Enemy does nothing");
+
+            DialogueManager.GetInstance().StartNewDialogue("Enemy does nothing");
         }
     }
 
@@ -41,12 +43,17 @@ public class EnemyResponse : MonoBehaviour
 
         if (Random.Range(0.0f, 1.0f) <= enemyRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
         {
-            Debug.Log("Enemy escaped");
+
+            DialogueManager.GetInstance().StartNewDialogue("Enemy escaped");
+            //Debug.Log("Enemy escaped");
             GetComponent<BattleManager>().ShutdownBattle();     //stop the battle immediately
         }
         else
         {
-            Debug.Log("Enemy failed to escape");
+
+            DialogueManager.GetInstance().StartNewDialogue("Enemy failed to escape");
+            
+            //Debug.Log("Enemy failed to escape");
         }
     }
 
