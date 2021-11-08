@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(CombatAttributes))]
 public class GetName : MonoBehaviour
 {
     [SerializeField]
