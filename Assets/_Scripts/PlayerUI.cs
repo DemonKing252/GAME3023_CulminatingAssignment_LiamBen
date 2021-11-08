@@ -16,5 +16,6 @@ public class PlayerUI : MonoBehaviour
         playerui.SetActive(false);
 
         enemyResponse.enemyRef = FindObjectOfType<Encounter>().selectedEnemy;
+        enemyResponse.gameObject.GetComponent<BattleManager>().SetEnemyRef(FindObjectOfType<Encounter>().selectedEnemy);
     }
 }

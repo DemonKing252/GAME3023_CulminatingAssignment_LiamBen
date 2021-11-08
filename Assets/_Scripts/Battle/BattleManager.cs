@@ -46,6 +46,10 @@ public class BattleManager : MonoBehaviour
 
     private bool inBattle = true;
 
+    public void SetEnemyRef(GameObject go)
+    {
+        enemyRef = go;
+    }
 
 
     void Start()
