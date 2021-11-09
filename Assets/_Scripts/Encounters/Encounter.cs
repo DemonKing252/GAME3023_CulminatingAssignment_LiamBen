@@ -38,6 +38,7 @@ public class Encounter : MonoBehaviour
         selectedEnemy = enemies[_rand];
         enemyUI.GetComponent<UIAnimationController>().path = enemies[_rand].GetComponent<Enemy>().path;
         enemyUI.GetComponent<UIAnimationController>().Refresh();
+        FindObjectOfType<PlayerUI>().selectedEncounter = this;
         
     }
     void OnTriggerExit2D(Collider2D collision)

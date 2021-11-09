@@ -22,6 +22,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private Button playerAttackButton;
 
+    
+
     [SerializeField]
     private Button playerDodgeButton;
 
@@ -36,6 +38,9 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     private GameObject dialogBox;
+
+    [SerializeField]
+    Animator sceneTransitionOut;
     #endregion
 
 
@@ -58,7 +63,14 @@ public class BattleManager : MonoBehaviour
         overworldGameGUI.gameObject.SetActive(false);
         
     }
-
+    public void StartUp()
+    {
+        playerTurn = true;
+        inBattle = true;
+        enemyImage.enabled = true; //stop rendering enemy image
+        enemyStatsCanvas.SetActive(true);  //stop rendering enemy stats canvas
+        SetPlayerButtonsClickable(true);   //disable buttons clicability
+    }
     public void ShutdownBattle()
     {
         StopAllCoroutines();  //stop all coroutines (timer for enemy)
@@ -67,6 +79,8 @@ public class BattleManager : MonoBehaviour
         enemyImage.enabled = false; //stop rendering enemy image
         enemyStatsCanvas.SetActive(false);  //stop rendering enemy stats canvas
         SetPlayerButtonsClickable(false);   //disable buttons clicability
+
+        sceneTransitionOut.SetTrigger("Exit");
     }
 
     void SetPlayerButtonsClickable(bool newClickableState)

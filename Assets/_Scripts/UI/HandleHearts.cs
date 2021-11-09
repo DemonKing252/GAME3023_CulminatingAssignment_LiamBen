@@ -22,6 +22,11 @@ public class HandleHearts : MonoBehaviour
     float playerHealth;
     float maxHealth;
 
+    public void SetPlayerRef(GameObject go)
+    {
+        playerRef = go;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
