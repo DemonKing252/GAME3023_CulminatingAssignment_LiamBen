@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class Encounter : MonoBehaviour
 {
     public GameObject selectedEnemy;
+    public GameObject battleManager;
+    public GameObject enemyNameUI;
 
     public Cinemachine.CinemachineVirtualCamera camera;
     public Animator crossfadeTransition;
@@ -39,7 +41,8 @@ public class Encounter : MonoBehaviour
         enemyUI.GetComponent<UIAnimationController>().path = enemies[_rand].GetComponent<Enemy>().path;
         enemyUI.GetComponent<UIAnimationController>().Refresh();
         FindObjectOfType<PlayerUI>().selectedEncounter = this;
-        
+        battleManager.GetComponent<BattleManager>().SetEnemyRef(selectedEnemy);
+        enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
     }
     void OnTriggerExit2D(Collider2D collision)
     {

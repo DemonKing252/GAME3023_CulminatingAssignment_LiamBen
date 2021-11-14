@@ -203,6 +203,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1005643122}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -399,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: ParentEntity
+  entityName: NinjaFrog
   health: 3
   maxHealth: 3
   healthPassiveRegen: 0.25
@@ -450,7 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRef: {fileID: 1786357295}
-  enemyRef: {fileID: 5530268}
+  enemyRef: {fileID: 0}
   enemyImage: {fileID: 1005643124}
   enemyStatsCanvas: {fileID: 1814977905}
   playerAttackButton: {fileID: 818377500}
@@ -487,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a46c2f7150d1d4408772ff6515ef25f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyRef: {fileID: 5530268}
+  enemyRef: {fileID: 0}
 --- !u!114 &136064692 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
@@ -4521,6 +4529,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedEnemy: {fileID: 0}
+  battleManager: {fileID: 0}
+  enemyNameUI: {fileID: 0}
   camera: {fileID: 1393103829}
   crossfadeTransition: {fileID: 915498168075303829}
   enemies:
@@ -5254,6 +5264,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 579056203}
   m_CullTransparentMesh: 1
+--- !u!1 &588940191 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5873259968725361460, guid: 5b39f69040d80284f8bb3598bf15dcf2, type: 3}
+  m_PrefabInstance: {fileID: 1037048599}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &615666783
 GameObject:
   m_ObjectHideFlags: 3
@@ -5670,6 +5685,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1005643122}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -5981,6 +6004,14 @@ PrefabInstance:
       propertyPath: enemyUI
       value: 
       objectReference: {fileID: 1005643122}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
@@ -6457,6 +6488,14 @@ PrefabInstance:
       propertyPath: enemyUI
       value: 
       objectReference: {fileID: 1005643122}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
@@ -9106,6 +9145,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1005643122}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -9436,6 +9483,14 @@ PrefabInstance:
       propertyPath: enemyUI
       value: 
       objectReference: {fileID: 1005643122}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4
@@ -42268,7 +42323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: ParentEntity
+  entityName: Pinky
   health: 3
   maxHealth: 3
   healthPassiveRegen: 0.25
@@ -42699,6 +42754,14 @@ PrefabInstance:
       propertyPath: enemyUI
       value: 
       objectReference: {fileID: 1005643122}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: enemyNameUI
+      value: 
+      objectReference: {fileID: 588940191}
+    - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
+      propertyPath: battleManager
+      value: 
+      objectReference: {fileID: 109106044}
     - target: {fileID: 628785286034673336, guid: 744c620d31c10b645805cc60753b5f7a, type: 3}
       propertyPath: enemies.Array.size
       value: 4

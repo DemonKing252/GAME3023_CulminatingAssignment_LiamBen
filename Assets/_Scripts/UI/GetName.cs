@@ -7,20 +7,25 @@ using TMPro;
 public class GetName : MonoBehaviour
 {
     [SerializeField]
-    GameObject gameObjectWithName;
+    GameObject defaultGameObjectWithName;
 
     private string nameOfGameObject;
 
     // Start is called before the first frame update
     void Start()
     {
-        nameOfGameObject = gameObjectWithName.GetComponent<CombatAttributes>().GetName();
-        GetComponent<TextMeshProUGUI>().SetText(nameOfGameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void SetEnemyName(string name)
+    {
+        
+        nameOfGameObject = name;
+        GetComponent<TextMeshProUGUI>().SetText(nameOfGameObject);
     }
 }

@@ -53,9 +53,15 @@ public class BattleManager : MonoBehaviour
 
     public void SetEnemyRef(GameObject go)
     {
+        Debug.Log("tried");
         enemyRef = go;
     }
 
+
+    public GameObject GetPlayerRef()
+    {
+        return playerRef;
+    }
 
     void Start()
     {
