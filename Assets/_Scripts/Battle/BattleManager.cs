@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private Button playerAttackButton;
 
-    
+    [SerializeField]
+    private Button playerAttackSpecialButton;
 
     [SerializeField]
     private Button playerDodgeButton;
@@ -102,6 +104,8 @@ public class BattleManager : MonoBehaviour
         enemyImage.enabled = false; //stop rendering enemy image
         enemyStatsCanvas.SetActive(false);  //stop rendering enemy stats canvas
         SetPlayerButtonsClickable(false);   //disable buttons clicability
+        playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up count
+        playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");
 
         sceneTransitionOut.SetTrigger("Exit");
     }
@@ -112,6 +116,7 @@ public class BattleManager : MonoBehaviour
         playerAttackButton.interactable = newClickableState;
         playerDodgeButton.interactable = newClickableState;
         playerFleeButton.interactable = newClickableState;
+        playerAttackSpecialButton.interactable = newClickableState;
 
         //only set health button to be interactable if passed bool is true AND player is NOT at full health!
         if (newClickableState == true && !playerRef.GetComponent<CombatAttributes>().GetIsAtFullHealth())
@@ -156,6 +161,37 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
         else
             ShutdownBattle();   //this runs if the enemy is killed.
+    }
+
+    public void PlayerInputAttackSpecial()
+    {
+        if (!playerTurn) return; //quick failsafe
+
+        if (playerRef.GetComponent<CombatAttributes>().GetSpecialAttackAllowed())
+        {
+            enemyAnim.SetTrigger("Normal");
+            //player has wound up attack. Allow attack to take place.
+            if (enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(playerRef.GetComponent<CombatAttributes>().GetDamageDealSpecial())) //decrease health of enemy by player's attack damage special amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
+            {
+                playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");
+                DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special");
+                StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
+            }
+            else
+                ShutdownBattle();   //this runs if the enemy is killed.
+
+            playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up to 0.
+        }
+        else
+        {
+            playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Attack\nSpecial");
+            DialogueManager.GetInstance().StartNewDialogue("Player Winds Up!");
+            Debug.Log(playerRef.GetComponent<CombatAttributes>().GetSpecialWindUp());
+            //attack is not wound up. Player will sacrifce this turn in order to wind up their attack;
+            playerRef.GetComponent<CombatAttributes>().WindUpSpecial();
+            StartCoroutine(FinishPlayerTurn());
+        }
+
     }
 
     public void PlayerInputDodge()

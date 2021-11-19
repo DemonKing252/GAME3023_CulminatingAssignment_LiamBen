@@ -42,6 +42,14 @@ public class CombatAttributes : MonoBehaviour
     [SerializeField]
     protected float damageDealSpecial = 2.0f;   //how much damage to deal during a special attack (will want to move this to another script for specific abilities)
 
+    protected int specialWindUp = 0;
+
+    [SerializeField]
+    protected int specialWindUpRequiredForAttack = 1;
+
+    [SerializeField]
+    protected int specialWindUpCapacity = 1;
+
     public float GetDamageDealNormal()
     {
         return damageDealNormal;
@@ -50,6 +58,28 @@ public class CombatAttributes : MonoBehaviour
     public float GetDamageDealSpecial()
     {
         return damageDealSpecial;
+    }
+
+    public int GetSpecialWindUp()
+    {
+        return specialWindUp;
+    }
+
+    public bool GetSpecialAttackAllowed()
+    {
+        if (specialWindUp >= specialWindUpRequiredForAttack) return true;
+        else return false;
+    }
+
+    public void SpecialWindUpReset()
+    {
+        specialWindUp = 0;
+    }
+
+    public void WindUpSpecial()     //allows special attack to wind up in power. Each time chosen, damage of special attack (when finally used) increases.
+    {
+        if (specialWindUp < specialWindUpCapacity)
+            specialWindUp++;
     }
     #endregion
 
