@@ -153,6 +153,8 @@ public class EnemyResponse : MonoBehaviour
     private void EnemyAttackNormal()
     {
         DialogueManager.GetInstance().StartNewDialogue("Enemy attacked!");
+        GetComponent<BattleManager>().GetPlayerAnimator().SetTrigger("Normal");
+
         playerRef.GetComponent<CombatAttributes>().DecreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetDamageDealNormal());
     }
 

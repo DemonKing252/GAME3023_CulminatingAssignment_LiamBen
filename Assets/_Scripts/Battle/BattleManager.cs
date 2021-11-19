@@ -41,6 +41,14 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     Animator sceneTransitionOut;
+
+    // Mecanim animations
+    [SerializeField]
+    private Animator playerAnim;
+
+    [SerializeField]
+    private Animator enemyAnim;
+
     #endregion
 
 
@@ -69,6 +77,15 @@ public class BattleManager : MonoBehaviour
         overworldGameGUI.gameObject.SetActive(false);
         
     }
+    public Animator GetPlayerAnimator()
+    {
+        return playerAnim;
+    }
+    public Animator GetEnemyAnimator()
+    {
+        return enemyAnim;
+    }
+
     public void StartUp()
     {
         playerTurn = true;
@@ -143,7 +160,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
-
+        playerAnim.SetTrigger("Dodge");
         DialogueManager.GetInstance().StartNewDialogue("Player Dodges");
         //Debug.Log("player Dodges");
         StartCoroutine(FinishPlayerTurn());
@@ -153,7 +170,10 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
+
+        playerAnim.SetTrigger("Heal");
         DialogueManager.GetInstance().StartNewDialogue("Player heals");
+
         //Debug.Log("player heals");
         playerRef.GetComponent<CombatAttributes>().IncreaseHealth(playerRef.GetComponent<CombatAttributes>().GetHealAmount());  //heal player by their determined heal amount
 

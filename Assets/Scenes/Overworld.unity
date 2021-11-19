@@ -468,6 +468,8 @@ MonoBehaviour:
   overworldGameGUI: {fileID: 1912961521}
   dialogBox: {fileID: 684193635}
   sceneTransitionOut: {fileID: 915498168075303829}
+  playerAnim: {fileID: 372829541}
+  enemyAnim: {fileID: 0}
   waitTimeForEnemyTurn: 1.5
 --- !u!4 &109106046
 Transform:
@@ -4832,6 +4834,7 @@ GameObject:
   - component: {fileID: 372829539}
   - component: {fileID: 372829538}
   - component: {fileID: 372829540}
+  - component: {fileID: 372829541}
   m_Layer: 5
   m_Name: Playerimg
   m_TagString: Untagged
@@ -4853,11 +4856,11 @@ RectTransform:
   m_Father: {fileID: 1797629490}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.25672612, y: 0.14388137}
-  m_AnchorMax: {x: 0.25672612, y: 0.14388137}
-  m_AnchoredPosition: {x: 15, y: 75}
+  m_AnchorMin: {x: 0.2277273, y: 0.14388137}
+  m_AnchorMax: {x: 0.2277273, y: 0.14388137}
+  m_AnchoredPosition: {x: 1.000061, y: -1.5}
   m_SizeDelta: {x: 150, y: 150}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.2, y: -0.01}
 --- !u!114 &372829538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4919,6 +4922,25 @@ MonoBehaviour:
   - idle-04
   - idle-05
   - idle-06
+--- !u!95 &372829541
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372829536}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 144479cfb7d388d4eb6e3f0070db6314, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
