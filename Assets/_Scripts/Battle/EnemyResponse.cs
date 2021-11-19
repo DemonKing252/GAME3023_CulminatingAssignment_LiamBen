@@ -143,11 +143,12 @@ public class EnemyResponse : MonoBehaviour
     {
         DialogueManager.GetInstance().StartNewDialogue("Enemy healed!");
         enemyRef.GetComponent<CombatAttributes>().IncreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetHealAmount());
+        GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Healing");
     }
 
     private void EnemyAttemptDodge()
     {
-
+        GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Dodge");
     }
 
     private void EnemyAttackNormal()

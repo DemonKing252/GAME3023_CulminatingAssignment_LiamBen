@@ -469,7 +469,7 @@ MonoBehaviour:
   dialogBox: {fileID: 684193635}
   sceneTransitionOut: {fileID: 915498168075303829}
   playerAnim: {fileID: 372829541}
-  enemyAnim: {fileID: 0}
+  enemyAnim: {fileID: 1005643127}
   waitTimeForEnemyTurn: 1.5
 --- !u!4 &109106046
 Transform:
@@ -6098,6 +6098,7 @@ GameObject:
   - component: {fileID: 1005643125}
   - component: {fileID: 1005643124}
   - component: {fileID: 1005643126}
+  - component: {fileID: 1005643127}
   m_Layer: 5
   m_Name: Enemyimg
   m_TagString: Untagged
@@ -6121,9 +6122,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.77054775, y: 0.5}
   m_AnchorMax: {x: 0.77054775, y: 0.5}
-  m_AnchoredPosition: {x: 7, y: 76}
+  m_AnchoredPosition: {x: 41.5, y: 2.5}
   m_SizeDelta: {x: 150, y: 150}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.27, y: 0.01}
 --- !u!114 &1005643124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6179,6 +6180,25 @@ MonoBehaviour:
   path: VRGuy
   method: 0
   paths: []
+--- !u!95 &1005643127
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005643122}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94a1938c59abe4e4abd6c1448c94923a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1033169415 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 279022457760460555, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}

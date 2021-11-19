@@ -150,7 +150,9 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return; //quick failsafe
 
-        if(enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(playerRef.GetComponent<CombatAttributes>().GetDamageDealNormal())) //decrease health of enemy by player's attack damage normal amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
+        enemyAnim.SetTrigger("Normal");
+
+        if (enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(playerRef.GetComponent<CombatAttributes>().GetDamageDealNormal())) //decrease health of enemy by player's attack damage normal amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
             StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
         else
             ShutdownBattle();   //this runs if the enemy is killed.
