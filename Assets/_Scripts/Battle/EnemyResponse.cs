@@ -19,13 +19,32 @@ public class EnemyResponse : MonoBehaviour
     private bool enemyHealsPassively;
     #endregion
 
+    #region weightingVars
     private float descisionWeightFlee = 0;
     private float descisionWeightDodge = 0;
     private float descisionWeightAttack = 0;
     private float descisionWeightAttackSpecial = 0;
     private float descisionWeightHeal = 0;
 
-    private void EnemyDescideAction()
+    private void ResetDescisionVals()
+    {
+        descisionWeightFlee = 0;
+        descisionWeightDodge = 0;
+        descisionWeightAttack = 0;
+        descisionWeightAttackSpecial = 0;
+        descisionWeightHeal = 0;
+    }
+    #endregion
+
+    public void EnemyRespond()
+    {
+        //first we'll get all the information we require to make a descision
+        GetConditionalAttributes();
+        //then we decide what action to take
+        EnemyDecideAction();
+    }
+
+    private void EnemyDecideAction()
     {
         //Each descision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
         ResetDescisionVals();
@@ -60,7 +79,6 @@ public class EnemyResponse : MonoBehaviour
         else
             descisionWeightAttack += 2;                                                    //enemy has more health than player. Add 2 points to attacking. (guarentees at least a weight of 2 for attacking)
         #endregion
-
 
         #region Handle Fleeing Possibility
         if (enemyConsiderFleeing)
@@ -100,18 +118,7 @@ public class EnemyResponse : MonoBehaviour
     }
 
 
-
-
-
-    public void EnemyRespond()
-    {
-        //first we'll get all the information we require to make a descision
-        GetConditionalAttributes();
-
-        EnemyDescideAction();
-        PrintDescisionStats();
-    }
-
+    #region fleeing
 
     private bool CheckAllowEnemyFlee()
     {
@@ -139,6 +146,8 @@ public class EnemyResponse : MonoBehaviour
         }
     }
 
+    #endregion
+
     private void EnemyHealSelf()
     {
         DialogueManager.GetInstance().StartNewDialogue("Enemy healed!");
@@ -146,6 +155,7 @@ public class EnemyResponse : MonoBehaviour
         GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Healing");
     }
 
+    #region attackingAndDodging
     private void EnemyAttemptDodge()
     {
         GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Dodge");
@@ -154,15 +164,21 @@ public class EnemyResponse : MonoBehaviour
     private void EnemyAttackNormal()
     {
         DialogueManager.GetInstance().StartNewDialogue("Enemy attacked!");
-        GetComponent<BattleManager>().GetPlayerAnimator().SetTrigger("Normal");
 
-        playerRef.GetComponent<CombatAttributes>().DecreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetDamageDealNormal());
+        playerRef.GetComponent<CombatAttributes>().SetupDodgeOpponent();     //Setup the dodging dice roll preemptively.
+
+        if (playerRef.GetComponent<CombatAttributes>().GetShouldPlayDamageReceivedAnim())    //if dice roll and dodge status allows playing of damaged recieved anim, play it.
+            GetComponent<BattleManager>().GetPlayerAnimator().SetTrigger("Normal");
+
+        playerRef.GetComponent<CombatAttributes>().DecreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetDamageDealNormal());     //deal the damage to the player
     }
+
 
     private void EnemyAttackSpecial()
     {
 
     }
+    #endregion
 
     private void GetConditionalAttributes()
     {
@@ -183,12 +199,5 @@ public class EnemyResponse : MonoBehaviour
         Debug.Log("FLEE: " + descisionWeightFlee + "  ATTCK: " + descisionWeightAttack + "  HEAL: " + descisionWeightHeal);
     }
 
-    private void ResetDescisionVals()
-    {
-        descisionWeightFlee = 0;
-        descisionWeightDodge = 0;
-        descisionWeightAttack = 0;
-        descisionWeightAttackSpecial = 0;
-        descisionWeightHeal = 0;
-    }
+    
 }

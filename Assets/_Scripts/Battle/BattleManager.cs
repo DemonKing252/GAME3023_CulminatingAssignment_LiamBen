@@ -41,6 +41,32 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private GameObject dialogBox;
 
+    public void SetEnemyRef(GameObject go)
+    {
+        enemyRef = go;
+    }
+
+
+    public GameObject GetPlayerRef()
+    {
+        return playerRef;
+    }
+
+
+    #endregion
+
+    #region turnInformation
+    [Header("Turn Info")]
+    [SerializeField]
+    private float waitTimeForEnemyTurn = 1.5f;      //seconds to wait before enemy makes their move
+
+    private bool playerTurn = true;
+
+    private bool inBattle = true;
+    #endregion
+
+    #region animation
+
     [SerializeField]
     Animator sceneTransitionOut;
 
@@ -51,34 +77,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private Animator enemyAnim;
 
-    #endregion
-
-
-    [SerializeField]
-    private float waitTimeForEnemyTurn = 1.5f;
-
-    private bool playerTurn = true;
-
-    private bool inBattle = true;
-
-    public void SetEnemyRef(GameObject go)
-    {
-        Debug.Log("tried");
-        enemyRef = go;
-    }
-
-
-    public GameObject GetPlayerRef()
-    {
-        return playerRef;
-    }
-
-    void Start()
-    {
-        //first off, disable the player's overworld hearts UI
-        overworldGameGUI.gameObject.SetActive(false);
-        
-    }
     public Animator GetPlayerAnimator()
     {
         return playerAnim;
@@ -87,28 +85,66 @@ public class BattleManager : MonoBehaviour
     {
         return enemyAnim;
     }
+    #endregion
 
+    #region startupShutdown
+
+    void Start()
+    {
+        //first off, disable the player's overworld hearts UI
+        overworldGameGUI.gameObject.SetActive(false);
+        
+    }
     public void StartUp()
     {
         playerTurn = true;
         inBattle = true;
-        enemyImage.enabled = true; //stop rendering enemy image
-        enemyStatsCanvas.SetActive(true);  //stop rendering enemy stats canvas
-        SetPlayerButtonsClickable(true);   //disable buttons clicability
+        enemyImage.enabled = true;              //stop rendering enemy image
+        enemyStatsCanvas.SetActive(true);       //stop rendering enemy stats canvas
+        SetPlayerButtonsClickable(true);        //disable buttons clicability
     }
     public void ShutdownBattle()
     {
-        StopAllCoroutines();  //stop all coroutines (timer for enemy)
-        Debug.Log("battle scene should close here!");
-        inBattle = false;   //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
-        enemyImage.enabled = false; //stop rendering enemy image
-        enemyStatsCanvas.SetActive(false);  //stop rendering enemy stats canvas
-        SetPlayerButtonsClickable(false);   //disable buttons clicability
+        StopAllCoroutines();                    //stop all coroutines (timer for enemy)
+        inBattle = false;                       //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
+        enemyImage.enabled = false;             //stop rendering enemy image
+        enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
+        SetPlayerButtonsClickable(false);       //disable buttons clicability
         playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up count
-        playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");
-
-        sceneTransitionOut.SetTrigger("Exit");
+        playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");    //reset special attack button to default text
+        sceneTransitionOut.SetTrigger("Exit");  //play exit anim
     }
+
+    IEnumerator FinishPlayerTurn()
+    {
+        if (!playerTurn) yield break; //failsafe. This should never be run in the first place without playerTurn being true. If it breaks here then something has gone VERY wrong.
+
+        //no longer players turn, set bool accordingly and disable buttons
+        playerTurn = false;
+        SetPlayerButtonsClickable(false);
+
+        if (!inBattle) yield break; //if no longer in a battle, return. Stuff before this line would have to happen both for ending turn and ending the battle
+
+        //add a little wait to enemy's actions so they're not instantanious
+        //NOTE: this is so dumb. If enemy successfully flees, I need the coroutine to stop and the shutdown func to start. However the enemy flee check completes AFTER the SetPlayerButtonsClickable() func completes if placed WaitForSeconds->EnemyRespond.
+        //If the Enemy response is done before the wait with EnemyRespond->WaitForSeconds, then we'd have to store the result of the enemy's descision(flee success, flee fail, attack, etc) and then apply it after the wait finished. But if we split the wait so the enemy
+        //flee check ALWAYS completes BEFORE both waits finish, we can skip having to add a delayed application of the enemy's descision.
+        //This is a temporary duct tape fix and I know it will make Joss cry.
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.9f);
+        GetComponent<EnemyResponse>().EnemyRespond();   //tell enemy to take its turn. If flee chosen and succeeds then only 90% of wait time will have been allowed to pass. Otherwise 100% will have been allowed to pass.
+        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.1f);
+
+
+        //player's turn once again! set bool accordingly and re-enable buttons
+        playerTurn = true;
+        SetPlayerButtonsClickable(true);
+
+    }
+
+    #endregion
+
+    #region PlayerInputs
+
 
     void SetPlayerButtonsClickable(bool newClickableState)
     {
@@ -125,35 +161,9 @@ public class BattleManager : MonoBehaviour
             playerHealButton.interactable = false;
     }
 
-
-    IEnumerator FinishPlayerTurn()
-    {
-        if (!playerTurn) yield break; //failsafe. This should never be run in the first place without playerTurn being true. If it breaks here then something has gone VERY wrong.
-
-        //no longer players turn, set bool accordingly and disable buttons
-        playerTurn = false;
-        SetPlayerButtonsClickable(false);
-
-        if (!inBattle) yield break; //if no longer in a battle, return. Stuff before this line would have to happen both for ending turn and ending the battle
-
-        //add a little wait to enemy's actions so they're not instantanious
-                    //NOTE: this is so dumb. If enemy successfully flees, I need the coroutine to stop and the shutdown func to start. However the enemy flee check completes AFTER the SetPlayerButtonsClickable() func completes if placed WaitForSeconds->EnemyRespond.
-                    //If the Enemy response is done before the wait with EnemyRespond->WaitForSeconds, then we'd have to store the result of the enemy's descision(flee success, flee fail, attack, etc) and then apply it after the wait finished. But if we split the wait so the enemy
-                    //flee check ALWAYS completes BEFORE both waits finish, we can skip having to add a delayed application of the enemy's descision.
-                    //This is a temporary duct tape fix and I know it will make Joss cry.
-        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.9f);
-        GetComponent<EnemyResponse>().EnemyRespond();   //tell enemy to take its turn. If flee chosen and succeeds then only 90% of wait time will have been allowed to pass. Otherwise 100% will have been allowed to pass.
-        yield return new WaitForSeconds(waitTimeForEnemyTurn * 0.1f);
-        
-
-        //player's turn once again! set bool accordingly and re-enable buttons
-        playerTurn = true;
-        SetPlayerButtonsClickable(true);
-
-    }
     public void PlayerInputAttack()
     {
-        if (!playerTurn) return; //quick failsafe
+        if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
 
         enemyAnim.SetTrigger("Normal");
 
@@ -165,29 +175,25 @@ public class BattleManager : MonoBehaviour
 
     public void PlayerInputAttackSpecial()
     {
-        if (!playerTurn) return; //quick failsafe
+        if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
 
         if (playerRef.GetComponent<CombatAttributes>().GetSpecialAttackAllowed())
-        {
-            enemyAnim.SetTrigger("Normal");
-            //player has wound up attack. Allow attack to take place.
+        {                               //attack is wound up! Ready to deal damage!
+            enemyAnim.SetTrigger("Normal");         //play attack animation on the player
             if (enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(playerRef.GetComponent<CombatAttributes>().GetDamageDealSpecial())) //decrease health of enemy by player's attack damage special amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
             {
+                                        //this runs if enemy is not killed
                 playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");
                 DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special");
-                StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
+                StartCoroutine(FinishPlayerTurn()); 
             }
             else
-                ShutdownBattle();   //this runs if the enemy is killed.
-
-            playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up to 0.
+                ShutdownBattle();       //this runs if the enemy is killed by the attack
         }
-        else
+        else                            //attack is not wound up. Player will sacrifce this turn in order to wind up their attack
         {
             playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Attack\nSpecial");
             DialogueManager.GetInstance().StartNewDialogue("Player Winds Up!");
-            Debug.Log(playerRef.GetComponent<CombatAttributes>().GetSpecialWindUp());
-            //attack is not wound up. Player will sacrifce this turn in order to wind up their attack;
             playerRef.GetComponent<CombatAttributes>().WindUpSpecial();
             StartCoroutine(FinishPlayerTurn());
         }
@@ -196,53 +202,41 @@ public class BattleManager : MonoBehaviour
 
     public void PlayerInputDodge()
     {
-        if (!playerTurn) return; //quick failsafe
-
-        playerAnim.SetTrigger("Dodge");
+        if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
+        playerAnim.SetTrigger("Dodge");         //play dodge animation on the player
         DialogueManager.GetInstance().StartNewDialogue("Player Dodges");
-        //Debug.Log("player Dodges");
+        playerRef.GetComponent<CombatAttributes>().SetAttemptDodgeAttack(true);
         StartCoroutine(FinishPlayerTurn());
     }
 
     public void PlayerInputHeal()
     {
-        if (!playerTurn) return; //quick failsafe
-
-
-        playerAnim.SetTrigger("Heal");
+        if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
+        playerAnim.SetTrigger("Heal");          //play heal animation on the player
         DialogueManager.GetInstance().StartNewDialogue("Player heals");
-
-        //Debug.Log("player heals");
         playerRef.GetComponent<CombatAttributes>().IncreaseHealth(playerRef.GetComponent<CombatAttributes>().GetHealAmount());  //heal player by their determined heal amount
-
         StartCoroutine(FinishPlayerTurn());
     }
 
     public void PlayerInputFlee()
     {
-        if (!playerTurn) return; //quick failsafe
-
-
-        //DialogueManager.GetInstance().StartNewDialogue("Player attempts to flee");
-        //Debug.Log("player attempts to flee");
+        if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
         PlayerAttemptFlee();
         StartCoroutine(FinishPlayerTurn());
     }
 
-    private void PlayerAttemptFlee()     //player attempts to flee. Returns true if attempt succeeded, false if attempt failed.
+    private void PlayerAttemptFlee()            //player attempts to flee. Returns true if attempt succeeded, false if attempt failed.
     {
 
         if (Random.Range(0.0f, 1.0f) <= playerRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
         {
             DialogueManager.GetInstance().StartNewDialogue("Player escaped");
-            //Debug.Log("Player escaped");
-            ShutdownBattle();     //stop the battle immediately
+            ShutdownBattle();                   //stop the battle immediately
         }
         else
-        {
-
             DialogueManager.GetInstance().StartNewDialogue("Player failed to escape");
-            //Debug.Log("Player failed to escape");
-        }
     }
+
+    #endregion
+
 }
