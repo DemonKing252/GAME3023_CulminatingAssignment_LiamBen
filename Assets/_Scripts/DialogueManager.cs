@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public UnityEvent dialogueEndEvent = new UnityEvent();
+
     private static DialogueManager sInstance;
     public static DialogueManager GetInstance()
     {
@@ -39,7 +42,7 @@ public class DialogueManager : MonoBehaviour
             index++;
 
         }
-
+        dialogueEndEvent.Invoke();
     }
 
 }

@@ -93,7 +93,7 @@ public class BattleManager : MonoBehaviour
     {
         //first off, disable the player's overworld hearts UI
         overworldGameGUI.gameObject.SetActive(false);
-        
+        DialogueManager.GetInstance().dialogueEndEvent.AddListener(OnDialogueEnded);
     }
     public void StartUp()
     {
@@ -113,6 +113,11 @@ public class BattleManager : MonoBehaviour
         playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up count
         playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");    //reset special attack button to default text
         sceneTransitionOut.SetTrigger("Exit");  //play exit anim
+    }
+
+    public void OnDialogueEnded()
+    {
+        Debug.Log("Dialogue ended.");
     }
 
     IEnumerator FinishPlayerTurn()
