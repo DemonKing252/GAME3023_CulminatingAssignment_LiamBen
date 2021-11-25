@@ -138,7 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3dbef0d7841aa46a81daa07bdf91b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 5
   selectedEnemy: {fileID: 0}
   battleManager: {fileID: 0}
   enemyNameUI: {fileID: 0}

@@ -104,15 +104,19 @@ public class GameDataManager : MonoBehaviour
     {
         
     }
-
+    public void PrepareForSaving()
+    {
+        gData.enemyAttributes.Clear();
+        gData.battleAttributes.Clear();
+    }
     public void SaveGame()
     {
+        PrepareForSaving();
+
         gData.playerPosition = new SerializedVector2(player.transform.position.x, player.transform.position.y);
         gData.playerHealth = player.GetComponent<CombatAttributes>().GetHealth();
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("BattleEncounter");
-
-        //gData.enemyAttributes = new EnemyAttributes[enemies.Length];
 
         for(int i = 0; i < enemies.Length; i++)
         {
@@ -129,26 +133,27 @@ public class GameDataManager : MonoBehaviour
 
             gData.enemyAttributes.Add(enemyCombatAttributes);
         }
+        Debug.Log("[Saving]:" + JsonUtility.ToJson(gData));
 
         PlayerPrefs.SetString(keyCode, JsonUtility.ToJson(gData));
         PlayerPrefs.Save();
-
-
-        GameObject[] gos = GameObject.FindGameObjectsWithTag("BattleEncounter");
-        foreach (var go in gos)
-            Destroy(go);
     }
     public void LoadGame()
     {
         GameObject[] gos = GameObject.FindGameObjectsWithTag("BattleEncounter");
-        foreach (var go in gos)
+        foreach (GameObject go in gos)
+        {
             Destroy(go);
+        }
 
         if (!PlayerPrefs.HasKey(keyCode))
         {
             SaveGame();
         }
         gData = JsonUtility.FromJson<GameData>(PlayerPrefs.GetString(keyCode));
+
+
+        Debug.Log("[Loading]:" + JsonUtility.ToJson(gData));
 
         player.transform.position = new Vector2(gData.playerPosition.x, gData.playerPosition.y);
         player.GetComponent<CombatAttributes>().SetHealth(gData.playerHealth);
@@ -167,7 +172,6 @@ public class GameDataManager : MonoBehaviour
             enemyAttributes[i].SetHealth(gData.enemyAttributes[i].health);
         }
 
-        //Debug.Log("Serialized class: " + JsonUtility.ToJson(player.GetComponent<CombatAttributes>()));
         
     }
     public void ClearAllPlayerPrefs()
