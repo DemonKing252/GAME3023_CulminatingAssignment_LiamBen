@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class CombatAttributes : MonoBehaviour
 {
     #region name
@@ -253,7 +254,11 @@ public class CombatAttributes : MonoBehaviour
     #endregion
 
 
-
+    // Saving and loading purposes
+    public void SetHealth(float health)
+    {
+        this.health = health;
+    }
 
 
 

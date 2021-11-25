@@ -35,14 +35,21 @@ public class Encounter : MonoBehaviour
 
     public void ChooseRandomEnemy()
     {
-        int _rand = Random.Range(0, enemies.Count); // end is inclusive so its fine.
+        do
+        {
+            int _rand = Random.Range(0, enemies.Count); // end is inclusive so its fine.
 
-        selectedEnemy = enemies[_rand];
-        enemyUI.GetComponent<UIAnimationController>().path = enemies[_rand].GetComponent<Enemy>().path;
-        enemyUI.GetComponent<UIAnimationController>().Refresh();
-        FindObjectOfType<PlayerUI>().selectedEncounter = this;
-        battleManager.GetComponent<BattleManager>().SetEnemyRef(selectedEnemy);
-        enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
+            selectedEnemy = enemies[_rand];
+            enemyUI.GetComponent<UIAnimationController>().path = enemies[_rand].GetComponent<Enemy>().path;
+            enemyUI.GetComponent<UIAnimationController>().Refresh();
+            FindObjectOfType<PlayerUI>().selectedEncounter = this;
+
+
+            battleManager.GetComponent<BattleManager>().battleRef = this;
+            battleManager.GetComponent<BattleManager>().SetEnemyRef(selectedEnemy);
+            enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
+
+        } while (selectedEnemy.GetComponent<CombatAttributes>().GetHealth() <= 0f);
     }
     void OnTriggerExit2D(Collider2D collision)
     {

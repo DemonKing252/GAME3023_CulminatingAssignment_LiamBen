@@ -41,6 +41,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private GameObject dialogBox;
 
+    public Encounter battleRef;
+
     public void SetEnemyRef(GameObject go)
     {
         enemyRef = go;
@@ -113,6 +115,15 @@ public class BattleManager : MonoBehaviour
         playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up count
         playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");    //reset special attack button to default text
         sceneTransitionOut.SetTrigger("Exit");  //play exit anim
+        if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
+        {
+            // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
+            // we need to switch camera priorities before destroying the battle.
+            
+            battleRef.camera.Priority -= 2;
+            // Wait for the battle to shutdown before destroying the references used in this script
+            Destroy(battleRef.gameObject, 0.5f);
+        }
     }
 
     public void OnDialogueEnded()
