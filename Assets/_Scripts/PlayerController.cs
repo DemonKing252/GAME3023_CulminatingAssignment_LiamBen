@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnLoadMainMenu()
     {
+        OurAudioSource.instance.ChangeTrack(Track.Menu);
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
     public void OnQuitGame()
@@ -95,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
         GameDataManager.Instance.SaveGame();
 
+        OurAudioSource.instance.ChangeTrack(Track.Menu);
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }

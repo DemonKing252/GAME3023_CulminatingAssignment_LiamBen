@@ -150,6 +150,8 @@ public class EnemyResponse : MonoBehaviour
 
     private void EnemyHealSelf()
     {
+
+        GetComponent<BattleManager>().heal.Play();
         DialogueManager.GetInstance().StartNewDialogue("Enemy healed!");
         enemyRef.GetComponent<CombatAttributes>().IncreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetHealAmount());
         GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Healing");
@@ -163,6 +165,7 @@ public class EnemyResponse : MonoBehaviour
 
     private void EnemyAttackNormal()
     {
+        GetComponent<BattleManager>().attackNormal.Play();
         DialogueManager.GetInstance().StartNewDialogue("Enemy attacked!");
 
         playerRef.GetComponent<CombatAttributes>().SetupDodgeOpponent();     //Setup the dodging dice roll preemptively.

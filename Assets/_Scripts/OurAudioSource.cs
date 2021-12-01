@@ -7,7 +7,8 @@ public enum Track
     Menu,
     OverworldFromMenu,
     Battle,
-    OverworldFromBattle
+    OverworldFromBattle,
+    BattleToMenu
 }
 
 public class OurAudioSource : MonoBehaviour
@@ -51,22 +52,22 @@ public class OurAudioSource : MonoBehaviour
         switch (newTrack)
         {
             case Track.Menu:
-                StartCoroutine(FadeBetweenTracks(mainMenuClip, overworldClip, 1.5f));
+                StartCoroutine(FadeBetweenTracks(mainMenuClip, overworldClip, 0.75f, newTrack));
                 break;
             case Track.OverworldFromMenu:
-                StartCoroutine(FadeBetweenTracks(overworldClip, mainMenuClip, 1.5f));
+                StartCoroutine(FadeBetweenTracks(overworldClip, mainMenuClip, 0.75f, newTrack));
                 break;
             case Track.Battle:
-                StartCoroutine(FadeBetweenTracks(battleClip, overworldClip, 1.5f));
+                StartCoroutine(FadeBetweenTracks(battleClip, overworldClip, 0.75f, newTrack));
                 break;
             case Track.OverworldFromBattle:
-                StartCoroutine(FadeBetweenTracks(overworldClip, battleClip, 1.5f));
+                StartCoroutine(FadeBetweenTracks(overworldClip, battleClip, 0.75f, newTrack));
                 break;
         }
 
         myTrack = newTrack;
     }
-    public IEnumerator FadeBetweenTracks(AudioSource a, AudioSource b, float fadeTime)
+    public IEnumerator FadeBetweenTracks(AudioSource a, AudioSource b, float fadeTime, Track newTrack)
     {
         float time = 0f;
 
@@ -85,6 +86,14 @@ public class OurAudioSource : MonoBehaviour
         b.loop = false;
         b.Stop();
 
+        if (newTrack == Track.Menu)
+        {
+            if (battleClip.isPlaying)
+            {
+                battleClip.loop = false;
+                battleClip.Stop();
+            }
+        }
     }
 
     // Update is called once per frame

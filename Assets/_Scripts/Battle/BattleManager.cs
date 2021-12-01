@@ -43,6 +43,13 @@ public class BattleManager : MonoBehaviour
 
     public Encounter battleRef;
 
+
+    public AudioSource attackNormal;
+    public AudioSource attackSpecial;
+    public AudioSource dodge;
+    public AudioSource heal;
+
+
     public void SetEnemyRef(GameObject go)
     {
         enemyRef = go;
@@ -200,6 +207,7 @@ public class BattleManager : MonoBehaviour
         if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
 
         enemyAnim.SetTrigger("Normal");
+        attackNormal.Play();
 
         if (enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(playerRef.GetComponent<CombatAttributes>().GetDamageDealNormal())) //decrease health of enemy by player's attack damage normal amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
             StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
@@ -211,6 +219,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
 
+        attackSpecial.Play();
         if (playerRef.GetComponent<CombatAttributes>().GetSpecialAttackAllowed())
         {                               //attack is wound up! Ready to deal damage!
             enemyAnim.SetTrigger("Normal");         //play attack animation on the player
@@ -236,6 +245,7 @@ public class BattleManager : MonoBehaviour
 
     public void PlayerInputDodge()
     {
+        dodge.Play();
         if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
         playerAnim.SetTrigger("Dodge");         //play dodge animation on the player
         DialogueManager.GetInstance().StartNewDialogue("Player Dodges");
@@ -245,6 +255,7 @@ public class BattleManager : MonoBehaviour
 
     public void PlayerInputHeal()
     {
+        heal.Play();
         if (!playerTurn) return;                //quick failsafe for if not the player turn, just return
         playerAnim.SetTrigger("Heal");          //play heal animation on the player
         DialogueManager.GetInstance().StartNewDialogue("Player heals");
