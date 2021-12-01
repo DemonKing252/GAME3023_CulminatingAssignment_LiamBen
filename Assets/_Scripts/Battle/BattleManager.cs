@@ -130,9 +130,24 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Dialogue ended.");
     }
+    private bool quitAlready = false;
+    void Update()
+    {
+        if (!quitAlready)
+        {
+            if (playerRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
+            {
+                playerRef.GetComponent<PlayerController>().LoseGame();
+                quitAlready = true;
+            }
+        }
+        
+    }
 
     IEnumerator FinishPlayerTurn()
     {
+        
+
         if (!playerTurn) yield break; //failsafe. This should never be run in the first place without playerTurn being true. If it breaks here then something has gone VERY wrong.
 
         //no longer players turn, set bool accordingly and disable buttons

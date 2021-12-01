@@ -19,10 +19,53 @@ public class PlayerController : MonoBehaviour
 
     public Animator cinemachineAnimator;
 
+    public Canvas winCanvas;
+    public Canvas loseCanvas;
+
+    public Button loseMainMenuBtn;
+    public Button loseQuitGameBtn;
+
+    public Button winMainMenuBtn;
+    public Button winQuitGameBtn;
+
+
+
+    public void OnLoadMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+    public void OnQuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+
+    }
+
+    public void WinGame()
+    {
+        // Can't resume game if you win otherwise theres no enemies to kill
+        PlayerPrefs.DeleteAll();
+        Time.timeScale = 0f;
+        winCanvas.gameObject.SetActive(true);
+    }
+    public void LoseGame()
+    {
+        // Can't resume game if you lose, your health is already zero!
+        PlayerPrefs.DeleteAll();
+        Time.timeScale = 0f;
+        loseCanvas.gameObject.SetActive(true);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         //DontDestroyOnLoad(gameObject);
+
+
+        Time.timeScale = 1f;
 
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -37,6 +80,11 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+        loseMainMenuBtn.onClick.AddListener(OnLoadMainMenu);
+        winMainMenuBtn.onClick.AddListener(OnLoadMainMenu);
+
+        loseQuitGameBtn.onClick.AddListener(OnQuitGame);
+        winQuitGameBtn.onClick.AddListener(OnQuitGame);
     }
 
     public void OnSaveAndQuit()
