@@ -5,7 +5,9 @@ using UnityEngine;
 public enum Track
 {
     Menu,
-    Overworld
+    OverworldFromMenu,
+    Battle,
+    OverworldFromBattle
 }
 
 public class OurAudioSource : MonoBehaviour
@@ -15,6 +17,9 @@ public class OurAudioSource : MonoBehaviour
     
     [SerializeField]
     AudioSource overworldClip;
+
+    [SerializeField]
+    AudioSource battleClip;
 
     Track myTrack = Track.Menu;
 
@@ -48,8 +53,14 @@ public class OurAudioSource : MonoBehaviour
             case Track.Menu:
                 StartCoroutine(FadeBetweenTracks(mainMenuClip, overworldClip, 1.5f));
                 break;
-            case Track.Overworld:
+            case Track.OverworldFromMenu:
                 StartCoroutine(FadeBetweenTracks(overworldClip, mainMenuClip, 1.5f));
+                break;
+            case Track.Battle:
+                StartCoroutine(FadeBetweenTracks(battleClip, overworldClip, 1.5f));
+                break;
+            case Track.OverworldFromBattle:
+                StartCoroutine(FadeBetweenTracks(overworldClip, battleClip, 1.5f));
                 break;
         }
 
@@ -59,6 +70,7 @@ public class OurAudioSource : MonoBehaviour
     {
         float time = 0f;
 
+        a.loop = true;
         a.Play();
         
         while (time < fadeTime)
@@ -70,6 +82,7 @@ public class OurAudioSource : MonoBehaviour
             // Wait for one frame
             yield return null;
         }
+        b.loop = false;
         b.Stop();
 
     }

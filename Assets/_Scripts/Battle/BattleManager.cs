@@ -104,9 +104,12 @@ public class BattleManager : MonoBehaviour
         enemyImage.enabled = true;              //stop rendering enemy image
         enemyStatsCanvas.SetActive(true);       //stop rendering enemy stats canvas
         SetPlayerButtonsClickable(true);        //disable buttons clicability
+
+        OurAudioSource.instance.ChangeTrack(Track.Battle);
     }
     public void ShutdownBattle()
     {
+        OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
         StopAllCoroutines();                    //stop all coroutines (timer for enemy)
         inBattle = false;                       //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
         enemyImage.enabled = false;             //stop rendering enemy image
