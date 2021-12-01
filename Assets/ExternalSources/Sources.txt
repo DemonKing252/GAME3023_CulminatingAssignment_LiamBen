@@ -1,0 +1,19 @@
+2D Lights:
+https://www.youtube.com/watch?v=nkgGyO9VG54&t=282s
+
+Cinemachine:
+https://www.youtube.com/watch?v=2jTY11Am0Ig&t=2s
+
+Assets:
+https://www.deviantart.com/monkey22mm/art/Game-Sprite-Player-390402967
+https://assetstore.unity.com/packages/2d/environments/backyard-top-down-tileset-53854
+
+Everything else (shadows, tile palettes), were taken from the lecture in Week 3
+
+Lab 6
+https://www.google.com/search?q=background+grass&sxsrf=AOaemvIRlUy9Fmszr4h_pxj6CT3esI44gQ:1636565544005&tbm=isch&source=iu&ictx=1&fir=aLh2w86hzPgdIM%252CH2yiGBxoLuqO9M%252C_%253BDPieRAlECQOT-M%252Cgvm7lguKi3e4kM%252C_%253BQPte4Ohu-icNUM%252CpskUZXQYgHdHwM%252C_%253B6hp6NyVBr3cbGM%252C8WvcoJBlhzI7nM%252C_%253BQT2S55cUd7MyfM%252C9M2fyLLcgGlYsM%252C_%253BEAtqboz3Soe9FM%252CnS8qwWLslRVBFM%252C_%253BfMv-SlB8A3HQjM%252C083aHfYbuhhE0M%252C_%253BUvHDz9TzP9h7FM%252CfSoLcjj0eN03cM%252C_%253Bf83Je9vSEXR9EM%252CrlflNT-SvlHLoM%252C_%253B_sX52uy8Ek747M%252CevuX2yba3oMUeM%252C_%253BgZg9T39xYP-iWM%252Cuc-n61Cl-JW3FM%252C_%253BabJJQGMsuQ770M%252CfKUqECf-3oauzM%252C_%253BYj-eUhpLcTCWFM%252CPdUM82Ru6AC8SM%252C_&vet=1&usg=AI4_-kSl5GICK8usRT34k2rVDTbmqj0-pg&sa=X&ved=2ahUKEwjc6JrfqY70AhV0mGoFHbIOAOEQ9QF6BAgGEAE#imgrc=DPieRAlECQOT-M
+https://docs.unity3d.com/Manual/class-Transition.html
+https://docs.unity3d.com/ScriptReference/Animator.SetTrigger.html
+https://www.youtube.com/watch?v=Xtfe5S9n4SI
+https://docs.unity3d.com/ScriptReference/JsonUtility.html
+https://www.youtube.com/watch?v=1VXeyeLthdQ
