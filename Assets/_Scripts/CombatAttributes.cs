@@ -37,26 +37,38 @@ public class CombatAttributes : MonoBehaviour
 
     [SerializeField]
     protected float likelihoodOfReceivedCriticalHit = 0.2f;     //how likely the opponent's attack is to land a critical hit (does extra damage) (>= 1 for awlays, <= 0 for never)
-
+    [SerializeField]
+    protected float likelihoodOfDodgeAttempt = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
     [SerializeField]
     protected float criticalHitReceivedMultiplier = 1.5f;       //how much the crittical hit attack should be multiplied
     #endregion
 
     #region dodging
+	
+	public bool canDodge = true;                                     //can this enemy dodge at all?
+	
     protected bool attemptDodgeAttack = false;                          //whether or not to dodge an incoming attack.
 
     protected bool successfullyDodgedAttack = false;                    //the randomly generated dice toss for if character WILL SUCCESSFULLY dodge an attack (seperated from dodging mechanic so it can be read in BattleManager BEFORE decreaseHealth is called)
 
-    public bool SetupDodgeOpponent()                                    //Sets up the dodging of an attack. Returns outcome of whether dodge succeeded
+    public bool RollDiceForDodgeSuccess()                                    //Sets up the dodging of an attack. Returns outcome of whether dodge succeeded
     {
 
-        float diceRoll = Random.Range(0.0f, 1.0f);
-        if (diceRoll <= likelihoodOfDodgeAttack && attemptDodgeAttack)  //roll dice... Based on likelihoodOfDodgeAttack, generate random num from 0-1. If generated num is greater than likelihoodOfDodgeAttack, dodge succeeded. Fails if attemptDodgeAttack is false
-            successfullyDodgedAttack = true;                            //save var for use later before turn has finished
+        float diceRoll = Random.Range(0.0f, 1.5f);
+        if (diceRoll <= likelihoodOfDodgeAttack)  //roll dice... Based on likelihoodOfDodgeAttack, generate random num from 0-1. If generated num is greater than likelihoodOfDodgeAttack, dodge succeeded. Fails if attemptDodgeAttack is false
+            return true;                          
         else
-            successfullyDodgedAttack = false;                           //save var for use later before turn has finished
+            return false;                         
+    }
 
-        return successfullyDodgedAttack;
+    public bool RollDiceForDodgeAttempt()                                  
+    {
+
+        float diceRoll = Random.Range(0.0f, 1.5f);
+        if (diceRoll <= likelihoodOfDodgeAttempt)  
+            return true;
+        else
+            return false;
     }
 
     public void SetAttemptDodgeAttack(bool b)

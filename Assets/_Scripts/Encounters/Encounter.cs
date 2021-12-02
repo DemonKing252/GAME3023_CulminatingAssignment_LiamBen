@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Encounter : MonoBehaviour
 {
     public GameObject selectedEnemy;
-    public GameObject battleManager;
+    public MasterBattleManager battleManager;
     public GameObject enemyNameUI;
 
     public Cinemachine.CinemachineVirtualCamera camera;
@@ -45,8 +45,9 @@ public class Encounter : MonoBehaviour
             FindObjectOfType<PlayerUI>().selectedEncounter = this;
 
 
-            battleManager.GetComponent<BattleManager>().battleRef = this;
-            battleManager.GetComponent<BattleManager>().SetEnemyRef(selectedEnemy);
+            battleManager.GetComponent<MasterBattleManager>().initialEncounter = this;
+            battleManager.GetComponent<MasterBattleManager>().enemyRef = selectedEnemy;
+            battleManager.GetComponent<MasterBattleManager>().SetUpNewBattle(selectedEnemy, this);
             enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
 
         } while (selectedEnemy.GetComponent<CombatAttributes>().GetHealth() <= 0f);

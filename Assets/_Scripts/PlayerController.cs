@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         loseQuitGameBtn.onClick.AddListener(OnQuitGame);
         winQuitGameBtn.onClick.AddListener(OnQuitGame);
 
-        OurAudioSource.instance.ChangeTrack(Track.OverworldFromMenu);
+        //OurAudioSource.instance.ChangeTrack(Track.OverworldFromMenu);
     }
 
     public void OnSaveAndQuit()

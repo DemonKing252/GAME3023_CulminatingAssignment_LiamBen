@@ -9,7 +9,7 @@ public class PlayerUI : MonoBehaviour
     private HandleHearts enemyHeartAttributesRef;
 
     [SerializeField]
-    private EnemyResponse enemyResponse;
+//    private EnemyResponse enemyResponse;
 
     public Encounter selectedEncounter;
     public Canvas encounterCanvas;
@@ -24,13 +24,13 @@ public class PlayerUI : MonoBehaviour
     public void ShowEncounter()
     {
         encounterCanvas.gameObject.SetActive(true);
-        FindObjectOfType<BattleManager>().StartUp();    // brute force approach
+//        FindObjectOfType<BattleManager>().StartUp();    // brute force approach
 
 
         playerui.SetActive(false);
 
-        enemyResponse.enemyRef = selectedEncounter.selectedEnemy;
-        enemyResponse.gameObject.GetComponent<BattleManager>().SetEnemyRef(selectedEncounter.selectedEnemy);
+//        enemyResponse.enemyRef = selectedEncounter.selectedEnemy;
+//        enemyResponse.gameObject.GetComponent<BattleManager>().SetEnemyRef(selectedEncounter.selectedEnemy);
         enemyHeartAttributesRef.SetPlayerRef(selectedEncounter.selectedEnemy);
     }
     public void HideEncounter()
