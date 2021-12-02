@@ -390,13 +390,13 @@ public class MasterBattleManager : MonoBehaviour
 
     public void ShutdownBattle()
     {
-        OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
+        //OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
         StopAllCoroutines();                    //stop all coroutines (timer for enemy)
         //inBattle = false;                       //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
         enemyImage.enabled = false;             //stop rendering enemy image
         enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
         GetComponent<PlayerInput>().SetPlayerButtonsClickable(false);       //disable buttons clicability
-        //sceneTransitionOut.SetTrigger("Exit");  //play exit anim
+        sceneTransitionOut.SetTrigger("Exit");  //play exit anim
         if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
         {
             // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
