@@ -17066,6 +17066,10 @@ MonoBehaviour:
   overworldGameGUI: {fileID: 1912961521}
   sceneTransitionOut: {fileID: 915498168075303829}
   playerTurn: 1
+  attackNormal: {fileID: 131377}
+  attackSpecial: {fileID: 331962185}
+  dodge: {fileID: 486690128}
+  heal: {fileID: 1523121398}
 --- !u!1 &1069380914
 GameObject:
   m_ObjectHideFlags: 0

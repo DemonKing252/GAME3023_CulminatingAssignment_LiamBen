@@ -54,6 +54,10 @@ public class MasterBattleManager : MonoBehaviour
     //turn information
     public bool playerTurn = true;
 
+    public AudioSource attackNormal;
+    public AudioSource attackSpecial;
+    public AudioSource dodge;
+    public AudioSource heal;
 
 
     public void Start()
@@ -65,6 +69,7 @@ public class MasterBattleManager : MonoBehaviour
     //STEP SETUP  A new battle has begun. Setup some standard stuff before we officially begin!
     public void SetUpNewBattle(GameObject passedEnemyRef, Encounter passedEncounter)
     {
+        OurAudioSource.instance.ChangeTrack(Track.Battle);
         //assign some stuff
         enemyRef = passedEnemyRef;
         enemyCombatAttributes = enemyRef.GetComponent<CombatAttributes>();
@@ -103,18 +108,21 @@ public class MasterBattleManager : MonoBehaviour
         {
             case choiceAction.attack:
                 {
-                    playerAnim.SetTrigger("Heal"); //NEED NEW ANIMATION HERE
+                    attackNormal.Play();
+                    playerAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Attacks!");
                     break;
                 }
             case choiceAction.special:
                 {
-                    enemyAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
+                    attackSpecial.Play();
+                    enemyAnim.SetTrigger("Critical"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special!");
                     break;
                 }
             case choiceAction.heal:
                 {
+                    heal.Play();
                     playerAnim.SetTrigger("Heal");
                     playerCombatAttributes.IncreaseHealth(playerCombatAttributes.GetHealAmount());
                     DialogueManager.GetInstance().StartNewDialogue("Player Heals!");
@@ -122,7 +130,8 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.dodge:
                 {
-                    //playerAnim.SetTrigger("Heal"); //NEED NEW ANIMATION HERE
+                    dodge.Play();
+                    playerAnim.SetTrigger("Dodge"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Prepares To Dodge!");
                     playerCombatAttributes.SetAttemptDodgeAttack(true);
                     break;
@@ -202,6 +211,7 @@ public class MasterBattleManager : MonoBehaviour
                 {
                     if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealNormal()))
                     {
+                        attackNormal.Play();
                         enemyAnim.SetTrigger("Normal");
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes Normal Damage!");
                     }
@@ -216,7 +226,8 @@ public class MasterBattleManager : MonoBehaviour
                 {
                     if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
                     {
-                        enemyAnim.SetTrigger("Normal");
+                        attackSpecial.Play();
+                        enemyAnim.SetTrigger("Critical");
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes Special Damage!");
                     }
                     else
@@ -228,6 +239,7 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.dodge:
                 {
+                    dodge.Play();
                     //Debug.Log("TRYING DODGE");
                     enemyAnim.SetTrigger("Dodge");
                     DialogueManager.GetInstance().StartNewDialogue("Enemy dodges!");
@@ -365,29 +377,6 @@ public class MasterBattleManager : MonoBehaviour
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void ShutdownBattle()
     {
         //OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
@@ -397,10 +386,13 @@ public class MasterBattleManager : MonoBehaviour
         enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
         GetComponent<PlayerInput>().SetPlayerButtonsClickable(false);       //disable buttons clicability
         sceneTransitionOut.SetTrigger("Exit");  //play exit anim
+
+        OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
         if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
         {
             // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
             // we need to switch camera priorities before destroying the battle.
+
 
             initialEncounter.camera.Priority -= 2;
             // Wait for the battle to shutdown before destroying the references used in this script

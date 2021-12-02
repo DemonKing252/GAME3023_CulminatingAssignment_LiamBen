@@ -88,6 +88,11 @@ public class OurAudioSource : MonoBehaviour
 
         if (newTrack == Track.Menu)
         {
+            if (overworldClip.isPlaying)
+            {
+                overworldClip.loop = false;
+                overworldClip.Stop();
+            }
             if (battleClip.isPlaying)
             {
                 battleClip.loop = false;
