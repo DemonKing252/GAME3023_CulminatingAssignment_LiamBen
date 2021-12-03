@@ -44,7 +44,6 @@ public class UIParticleBurst : MonoBehaviour
     }
     IEnumerator EmitOutter()
     {
-        //Debug.Log("Starting new thread at : " + Time.time.ToString());
         yield return new WaitForSeconds(0.5f);
 
         float time = 0f;
@@ -58,7 +57,6 @@ public class UIParticleBurst : MonoBehaviour
                 float angle = ((float)(i - innerBurstCount) / (float)(outterBurstCount)) * 360f;
                 bursts[i + innerBurstCount].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad), speed * Mathf.Sin(angle * Mathf.Deg2Rad));
                 bursts[i + innerBurstCount].transform.localScale = Vector3.Lerp(Vector3.one * 0.1f, Vector3.one, time / (lifeTime + 0.3f));
-                //bursts[i].transform.position += new Vector3(3f, 0f);
             }
             yield return null;
 
@@ -74,7 +72,6 @@ public class UIParticleBurst : MonoBehaviour
     }
     IEnumerator EmitInner()
     {
-        //Debug.Log("Starting new thread at : " + Time.time.ToString());
 
         float time = 0f;
         while (time < lifeTime + 0.3f)
@@ -87,7 +84,6 @@ public class UIParticleBurst : MonoBehaviour
                 float angle = ((float)i / (float)innerBurstCount) * 360f;
                 bursts[i].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad), speed * Mathf.Sin(angle * Mathf.Deg2Rad));
                 bursts[i].transform.localScale = Vector3.Lerp(Vector3.one * 0.1f, Vector3.one * 0.6f, time / (lifeTime + 0.3f));
-                //bursts[i].transform.position += new Vector3(3f, 0f);
             }
             yield return null;
 
