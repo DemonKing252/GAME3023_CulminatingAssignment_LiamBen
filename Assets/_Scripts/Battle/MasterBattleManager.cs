@@ -8,6 +8,17 @@ using TMPro;
 //Player's turn begins ->   Player makes move ->                      dialog plays and Player's move animation plays ->       once both dialog and animation finished ->        Enemy plays receiving animation (dodging or receiving damage happens here) -> Enemy makes move -> dialog plays and Enemy's move animation plays -> once both dialog and animation finished -> Player plays receiving animation (dodging or receiving damage happens here). Repeat until one escapes or dies. Dodging
 //SetUpNewBattle            PlayerInput.cs -> PlayerChoseAction      EX:  PlayerAttack                                      delayEndOfPlayerTurn(2, playerActionThisTurn)   
 
+public static class AbilityDamageColor
+{
+    public static Color attackNormal = new Color(1f, 0f, 0f, 1f);
+    public static Color attackSpecial = new Color(0.6f, 0f, 0f, 1f);
+    public static Color dodge = new Color(0f, 1f, 1f, 1f);
+    public static Color heal = new Color(0f, 1f, 0.2f, 1f);
+
+}
+
+
+
 public class MasterBattleManager : MonoBehaviour
 {
 
@@ -116,7 +127,7 @@ public class MasterBattleManager : MonoBehaviour
             case choiceAction.special:
                 {
                     attackSpecial.Play();
-                    enemyAnim.SetTrigger("Critical"); //NEED NEW ANIMATION HERE
+                    playerAnim.SetTrigger("Critical"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special!");
                     break;
                 }
@@ -126,6 +137,7 @@ public class MasterBattleManager : MonoBehaviour
                     playerAnim.SetTrigger("Heal");
                     playerCombatAttributes.IncreaseHealth(playerCombatAttributes.GetHealAmount());
                     DialogueManager.GetInstance().StartNewDialogue("Player Heals!");
+                    playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.heal);
                     break;
                 }
             case choiceAction.dodge:
@@ -213,6 +225,7 @@ public class MasterBattleManager : MonoBehaviour
                     {
                         attackNormal.Play();
                         enemyAnim.SetTrigger("Normal");
+                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes Normal Damage!");
                     }
                     else
@@ -226,12 +239,16 @@ public class MasterBattleManager : MonoBehaviour
                 {
                     if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
                     {
+                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
                         attackSpecial.Play();
                         enemyAnim.SetTrigger("Critical");
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes Special Damage!");
                     }
                     else
                     {
+                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
+                        attackSpecial.Play();
+                        enemyAnim.SetTrigger("Critical");
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes FATAL Special Damage!");
                         ShutdownBattle();
                     }
@@ -243,6 +260,7 @@ public class MasterBattleManager : MonoBehaviour
                     //Debug.Log("TRYING DODGE");
                     enemyAnim.SetTrigger("Dodge");
                     DialogueManager.GetInstance().StartNewDialogue("Enemy dodges!");
+                    enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
                     break;
                 }
             case choiceAction.dodgeFail:
@@ -286,7 +304,6 @@ public class MasterBattleManager : MonoBehaviour
         {
             case choiceAction.attack:
                 {
-                    enemyAnim.SetTrigger("Heal");
                     DialogueManager.GetInstance().StartNewDialogue("Enemy Attacks Normal!");
                     break;
                 }
@@ -314,6 +331,7 @@ public class MasterBattleManager : MonoBehaviour
                 {
                     if (playerCombatAttributes.GetattemptDodgeAttack())
                     {
+                        playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
                         playerAnim.SetTrigger("Dodge");
                         DialogueManager.GetInstance().StartNewDialogue("Player Dodges Enemy's Attack!");
                         playerCombatAttributes.SetAttemptDodgeAttack(false);
@@ -322,6 +340,8 @@ public class MasterBattleManager : MonoBehaviour
                     {
                         if (playerCombatAttributes.DecreaseHealth(enemyCombatAttributes.GetDamageDealNormal()))
                         {
+
+                            playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
                             playerAnim.SetTrigger("Normal");
                             DialogueManager.GetInstance().StartNewDialogue("Player Takes Normal Damage!");
                         }
@@ -340,11 +360,14 @@ public class MasterBattleManager : MonoBehaviour
                 {
                     if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
                     {
+                        playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
                         playerAnim.SetTrigger("Normal");
                         DialogueManager.GetInstance().StartNewDialogue("Player Takes Special Damage!");
                     }
                     else
                     {
+                        playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
+                        playerAnim.SetTrigger("Normal");
                         DialogueManager.GetInstance().StartNewDialogue("Player Takes FATAL Special Damage!");
                         ShutdownBattle();
                     }

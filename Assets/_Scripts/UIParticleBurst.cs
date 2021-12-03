@@ -24,11 +24,21 @@ public class UIParticleBurst : MonoBehaviour
             child.gameObject.SetActive(false);
             child.gameObject.GetComponent<UnityEngine.UI.Image>().color = particleColor;
         }
-        StartBurst();
+        //StartBurst();
     }
 
+    public void StartBurst(Color col)
+    { 
+        foreach (GameObject go in bursts)
+            go.GetComponent<UnityEngine.UI.Image>().color = col;
+        StartCoroutine(EmitInner());
+        StartCoroutine(EmitOutter());
+
+    }
     public void StartBurst()
     {
+        foreach (GameObject go in bursts)
+            go.GetComponent<UnityEngine.UI.Image>().color = Color.white;
         StartCoroutine(EmitInner());
         StartCoroutine(EmitOutter());
     }
@@ -95,10 +105,10 @@ public class UIParticleBurst : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            StartBurst();
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    StartBurst();
+        //}
         
     }
 }
