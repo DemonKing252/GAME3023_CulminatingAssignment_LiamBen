@@ -11,6 +11,7 @@ TagManager:
   - VR
   - PlayerCanvas
   - Battle
+  - BattleUI
   layers:
   - Default
   - TransparentFX

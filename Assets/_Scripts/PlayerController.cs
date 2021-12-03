@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public Button winMainMenuBtn;
     public Button winQuitGameBtn;
+    public MasterBattleManager masterBattleMgr;
 
 
 

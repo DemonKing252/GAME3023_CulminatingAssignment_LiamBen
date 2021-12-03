@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Encounter : MonoBehaviour
 {
     public GameObject selectedEnemy;
-    public MasterBattleManager battleManager;
     public GameObject enemyNameUI;
 
     public Cinemachine.CinemachineVirtualCamera camera;
@@ -18,14 +17,23 @@ public class Encounter : MonoBehaviour
     void Start()
     {
         
+        
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        //GetComponent<Cinemachine.CinemachineTriggerAction>().
+        if (collision.gameObject.GetComponent<PlayerController>() != null)
+        {
+            // 50% chance to happen
+            if (Random.Range(1, 3) == 2)
+                return;
 
-        // change priority of the encounter camera
+            // If the player is moving at a decent speed
+            if (collision.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody2D>().velocity.magnitude < 0.4f)
+                return;
 
+            // If the above (inverse) condtions are met, we let the battle happen
+        }
 
         ChooseRandomEnemy();
         camera.Priority += 2;
@@ -45,9 +53,9 @@ public class Encounter : MonoBehaviour
             FindObjectOfType<PlayerUI>().selectedEncounter = this;
 
 
-            battleManager.GetComponent<MasterBattleManager>().initialEncounter = this;
-            battleManager.GetComponent<MasterBattleManager>().enemyRef = selectedEnemy;
-            battleManager.GetComponent<MasterBattleManager>().SetUpNewBattle(selectedEnemy, this);
+            FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().initialEncounter = this;
+            FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().enemyRef = selectedEnemy;
+            FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().SetUpNewBattle(selectedEnemy, this);
             enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
 
         } while (selectedEnemy.GetComponent<CombatAttributes>().GetHealth() <= 0f);

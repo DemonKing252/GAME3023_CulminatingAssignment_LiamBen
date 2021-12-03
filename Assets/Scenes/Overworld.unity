@@ -32158,7 +32158,7 @@ GameObject:
   - component: {fileID: 1797629487}
   m_Layer: 5
   m_Name: BattleUI
-  m_TagString: Untagged
+  m_TagString: BattleUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62790,6 +62790,10 @@ PrefabInstance:
       propertyPath: loseQuitGameBtn
       value: 
       objectReference: {fileID: 1140332036}
+    - target: {fileID: 2823164296732316096, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
+      propertyPath: masterBattleMgr
+      value: 
+      objectReference: {fileID: 1046078034}
     - target: {fileID: 5346572897469620950, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
       propertyPath: health
       value: 5
