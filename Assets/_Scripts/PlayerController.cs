@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     public void OnExitWithoutSaving()
     {
         // skip saving the game
+        OurAudioSource.instance.ChangeTrack(Track.Menu);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
