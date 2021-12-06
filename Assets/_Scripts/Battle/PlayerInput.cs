@@ -6,11 +6,13 @@ using TMPro;
 public enum choiceAction
 {
     attack,
-    special,
+    specialScare,
+    specialGlue,
     dodge,
     dodgeFail,
     heal,
     flee,
+    fleeFail,
     none,
     unassigned
 }
@@ -20,7 +22,7 @@ public class PlayerInput : MonoBehaviour
     private Button playerAttackButton;
 
     [SerializeField]
-    private Button playerAttackSpecialButton;
+    private Button playerSpecialButton;
 
     [SerializeField]
     private Button playerDodgeButton;
@@ -31,24 +33,44 @@ public class PlayerInput : MonoBehaviour
     [SerializeField]
     private Button playerFleeButton;
 
-
+    [SerializeField]
+    private GameObject playerSpecialMovesCanvas;
     #region PlayerInputs
 
 
     public void SetPlayerButtonsClickable(bool newClickableState)
     {
+        if (GetComponent<MasterBattleManager>().turnsUntilPlayerSpecialAllowed <= 0)
+        {
+            playerSpecialButton.interactable = newClickableState;
+            playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Use Special Move");
+        }
+        else
+        {
+            playerSpecialButton.interactable = false;
+            playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Special Move Unavailable \n Unlocks in: " + GetComponent<MasterBattleManager>().turnsUntilPlayerSpecialAllowed);
+        }
 
         //set buttons interactability based on passed bool
         playerAttackButton.interactable = newClickableState;
         playerDodgeButton.interactable = newClickableState;
         playerFleeButton.interactable = newClickableState;
-        playerAttackSpecialButton.interactable = newClickableState;
+
+        playerSpecialMovesCanvas.SetActive(false);
 
         //only set health button to be interactable if passed bool is true AND player is NOT at full health!
         if (newClickableState == true && !GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().GetIsAtFullHealth())
+        {
             playerHealButton.interactable = true;
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Heal");
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
         else
+        {
             playerHealButton.interactable = false;
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("You're at \n Full Health");
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
+        }
     }
 
     public void PlayerInputAttack()
@@ -65,44 +87,31 @@ public class PlayerInput : MonoBehaviour
         //    ShutdownBattle();   //this runs if the enemy is killed.
     }
 
-    public void PlayerInputAttackSpecial()
+    public void PlayerInputSpecialMenuToggle()
     {
-        Debug.Log("Player Special Pressed");
-        GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.special);
-        //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
-
-        //if (masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().GetSpecialAttackAllowed())
-        //{                               //attack is wound up! Ready to deal damage!
-        //    masterBattleManagerRef.enemyAnim.SetTrigger("Normal");         //play attack animation on the player
-        //    if (masterBattleManagerRef.enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().GetDamageDealSpecial())) //decrease health of enemy by player's attack damage special amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
-        //    {
-        //        //this runs if enemy is not killed
-        //        playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");
-        //        DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special");
-        //        StartCoroutine(FinishPlayerTurn());
-        //    }
-        //    else
-        //        ShutdownBattle();       //this runs if the enemy is killed by the attack
-        //}
-        //else                            //attack is not wound up. Player will sacrifce this turn in order to wind up their attack
-        //{
-        //    playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Attack\nSpecial");
-        //    DialogueManager.GetInstance().StartNewDialogue("Player Winds Up!");
-        //    masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().WindUpSpecial();
-        //    StartCoroutine(FinishPlayerTurn());
-        //}
-
+        playerSpecialMovesCanvas.SetActive(!playerSpecialMovesCanvas.activeInHierarchy);
     }
+
+    public void PlayerInputSpecialMenuDisable()
+    {
+        playerSpecialMovesCanvas.SetActive(false);
+    }
+
+    public void PlayerInputSpecialScare()
+    {
+        GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.specialScare);
+    }
+
+    public void PlayerInputSpecialGlue()
+    {
+        GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.specialGlue);
+    }
+
 
     public void PlayerInputDodge()
     {
         Debug.Log("Player Dodge Pressed");
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.dodge);
-        //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
-        //playerAnim.SetTrigger("Dodge");         //play dodge animation on the player
-        //DialogueManager.GetInstance().StartNewDialogue("Player Dodges");
-        //masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().SetAttemptDodgeAttack(true);
-        //StartCoroutine(FinishPlayerTurn());
     }
 
     public void PlayerInputHeal()
@@ -123,18 +132,6 @@ public class PlayerInput : MonoBehaviour
         //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
         //PlayerAttemptFlee();
         //StartCoroutine(FinishPlayerTurn());
-    }
-
-    private void PlayerAttemptFlee()            //player attempts to flee. Returns true if attempt succeeded, false if attempt failed.
-    {
-
-        //if (Random.Range(0.0f, 1.0f) <= masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
-        //{
-        //    DialogueManager.GetInstance().StartNewDialogue("Player escaped");
-        //    ShutdownBattle();                   //stop the battle immediately
-        //}
-        //else
-        //    DialogueManager.GetInstance().StartNewDialogue("Player failed to escape");
     }
 
     #endregion

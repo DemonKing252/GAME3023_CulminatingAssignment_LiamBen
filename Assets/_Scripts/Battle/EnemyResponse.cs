@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class EnemyResponse : MonoBehaviour
 {
-    private CombatAttributeModifier behaviourModifier;
+
+    //[SerializeField]
+    //private CombatAttributeModifier defaultBehaviourModifier;
+    //[SerializeField]
+    //public CombatAttributeModifier behaviourModifier;
 
     [SerializeField]
     public GameObject enemyRef;
@@ -43,25 +47,26 @@ public class EnemyResponse : MonoBehaviour
 
     public choiceAction EnemyRespond()
     {
-        //return choiceAction.attack;
-        if (behaviourModifier != null)
-        {
-            Debug.Log("ENEMY INFLUENCED!!!!");
-        }
 
         //second we'll get all the information we require to make a decision
         GetConditionalAttributes();
+
+
+
         //then we decide what action to take
-        return EnemyDecideAction();
+        choiceAction enemyDecision = EnemyDecideAction();
+        return enemyDecision;
     }
 
-    private void EnemyCalculateAction()
+    private void EnemyCalculateHealing()
     {
-        //Each decision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
-        ResetdecisionVals();
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.fleeConsideration == modifierStates.neverBehaviour)
+        {
+            decisionWeightHeal = -1;
+            return;
+        }
 
 
-        #region Handle Healing Possibility
         //if enemy is NOT at full health
         if (enemyHealth < enemyMaxHealth)
         {
@@ -71,13 +76,20 @@ public class EnemyResponse : MonoBehaviour
             if (enemyHealth < enemyMaxHealth / 4) decisionWeightHeal += 2.0f;        //enemy under 1/4 health, add total of 5 points
 
 
-            if (enemyHealth < playerHealth) decisionWeightHeal += 1.5f;              //enemy has less health than player and is thus losing. Add 1.5 more points.
+            if (enemyHealth < playerHealth) decisionWeightHeal += 3.0f;              //enemy has less health than player and is thus losing. Add 3.0 more points.
 
             if (!enemyHealsPassively) decisionWeightHeal *= 1.25f;   //enemy doesn't regen health passively, multiply heal likelyhood by 1.25. If all if have passed thus far, Enemy MUST heal as its decisionWeightHeal will be 10!
         }
-        #endregion
+    }
 
-        #region Handle Attacking Possibility
+    private void EnemyCalculateAttacking()
+    {
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.attackConsideration == modifierStates.neverBehaviour)
+        {
+            decisionWeightAttack = -1;
+            return;
+        }
+
         //Health Comparison Influences
         if (playerHealth < playerMaxHealth / 1.5) decisionWeightAttack++;              //player under  2/3 health, add single point
         if (playerHealth < playerMaxHealth / 2) decisionWeightAttack++;                //player under under 1/2 health, add total of 2 points
@@ -89,24 +101,55 @@ public class EnemyResponse : MonoBehaviour
             decisionWeightAttack += 3;                                                 //enemy has less health than player. Add 2 points to attacking.
         else
             decisionWeightAttack += 2;                                                    //enemy has more health than player. Add 2 points to attacking. (guarentees at least a weight of 2 for attacking)
-        #endregion
 
-        #region Handle Fleeing Possibility
+    }
+
+    private void EnemyCalculateFleeing()
+    {
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.fleeConsideration == modifierStates.neverBehaviour)
+        {
+            decisionWeightFlee = -1;
+            return;
+        }
+
         if (enemyConsiderFleeing)
         {
-            decisionWeightFlee++;          //if an option, add a single point right off the bat.
+            decisionWeightFlee += 3;          //if an option, add a 3 points right off the bat.
 
             if (enemyHealth < enemyMaxHealth / 3) decisionWeightFlee += 2;    //if enemy under 1/3 health, add another 2 points
-            if (enemyHealth < enemyMaxHealth / 4) decisionWeightFlee += 2;    //if enemy under 1/4 health, add another 1 point
-
-            //NOTE: fleeing doesn't sum to 10! Instead it'll sum to 4! This is so there is at most a 4/10 chance of enemy ATTEMPTING to flee!
+            if (enemyHealth < enemyMaxHealth / 4) decisionWeightFlee += 2;    //if enemy under 1/4 health, add another 2 points
         }
-        #endregion
+    }
+    private void EnemyCalculateAction()
+    {
+        //Each decision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
+        ResetdecisionVals();
+
+        EnemyCalculateHealing();
+
+        EnemyCalculateAttacking();
+
+        EnemyCalculateFleeing();
 
     }
 
     private choiceAction EnemyDecideAction()
     {
+
+
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.attackConsideration == modifierStates.certaintyBehaviour)
+            return choiceAction.attack;
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.healConsideration == modifierStates.certaintyBehaviour)
+            return choiceAction.heal;
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.fleeConsideration == modifierStates.certaintyBehaviour)
+        {
+            //attempt to flee
+            if (Random.Range(0.0f, 1.0f) <= 0.85) //make fleeing from special flee ability very likely
+                return choiceAction.flee;
+            else
+                return choiceAction.fleeFail;
+        }
+
         //ok so lets figure out what each decision weights are...
         EnemyCalculateAction();
 
@@ -114,83 +157,42 @@ public class EnemyResponse : MonoBehaviour
         //Now we go through all decision options one-by-one to determine an action! Each decision is weighted in the above function
 
 
-        //THIS ORDER IS IMPORTANT! FLEE->HEAL->ATTACK->DODGE->ATTACKSPECIAL
-        //Each decision weight maxes at 10 (except flee that maxes out at 5). Highest range of random maxes at 15 to ensure enemies can make stategically wrong descisons!
-        if (enemyConsiderFleeing && Random.Range(0.0f, 15.0f) <= decisionWeightFlee)//first action to consider is fleeing.
+        //THIS ORDER IS IMPORTANT! FLEE->HEAL->ATTACK
+        //Each decision weight maxes at 10 (except flee that maxes out at 7). Highest range of random maxes at 15 to ensure enemies can make stategically wrong descisons! (Except flee that has random max set to 10 making fleeing on low enemy low health likely)
+        if (decisionWeightFlee > 0 && enemyConsiderFleeing && Random.Range(0.0f, 10.0f) <= decisionWeightFlee)//first action to consider is fleeing.
         {
             //attempt to flee
-            return choiceAction.flee;
+            if (Random.Range(0.0f, 1.0f) <= enemyRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
+                return choiceAction.flee;
+            else
+                return choiceAction.fleeFail;
         }
         if (decisionWeightHeal > 0 && Random.Range(0.0f, 15.0f) <= decisionWeightHeal)       //second action to consider is healing.
         {
             return choiceAction.heal;
         }
-        if (Random.Range(0.0f, 15.0f) <= decisionWeightAttack)     //third action to consider is attacking.
-        {
-            return choiceAction.attack;
-        }
 
-
-        //failsafe. If all else failed, attack anyways. This doesn't make sense now as this is basically just an else to the health if, but when more options become implemented it'll make more sense.
+        //failsafe. If all else failed, attack normal.
         return choiceAction.attack;
     }
 
 
-    //#region fleeing
-
     private bool CheckAllowEnemyFlee()
     {
         if (enemyRef.GetComponent<CombatAttributes>().GetHealth() / enemyRef.GetComponent<CombatAttributes>().GetMaxHealth() <      //if monster's health/maxHealth is below flee threshold, return true and allow enemy to consider fleeing.
-            enemyRef.GetComponent<CombatAttributes>().GetThresholdForFleeing()) return true;   //allow fleeing
-        else return false;   //disallow fleeing
+            enemyRef.GetComponent<CombatAttributes>().GetThresholdForFleeing())
+        {
+            Debug.Log("ALLOW FLEEING");
+            return true;   //allow fleeing
+        } 
+        else
+        {
+            Debug.Log("NO FLEEING");
+            return false;   //disallow fleeing
+        }
     }
 
-    //private void EnemyAttemptFlee()     //enemy will attempt to flee. Returns true if attempt succeeded, false if attempt failed.
-    //{
-
-    //    if (Random.Range(0.0f, 1.0f) <= enemyRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
-    //    {
-
-    //        DialogueManager.GetInstance().StartNewDialogue("Enemy Flees and Escaped");
-    //        //Debug.Log("Enemy escaped");
-    //        GetComponent<BattleManager>().ShutdownBattle();     //stop the battle immediately
-    //    }
-    //    else
-    //    {
-
-    //        DialogueManager.GetInstance().StartNewDialogue("Enemy Failed to Flee");
-
-    //        //Debug.Log("Enemy failed to escape");
-    //    }
-    //}
-
-    //#endregion
-
-    //private void EnemyHealSelf()
-    //{
-    //    DialogueManager.GetInstance().StartNewDialogue("Enemy healed!");
-    //    enemyRef.GetComponent<CombatAttributes>().IncreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetHealAmount());
-    //    GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Healing");
-    //}
-
-    //#region attackingAndDodging
-    //private void EnemyAttemptDodge()
-    //{
-    //    GetComponent<BattleManager>().GetEnemyAnimator().SetTrigger("Dodge");
-    //}
-
-    //private void EnemyAttackNormal()
-    //{
-    //    DialogueManager.GetInstance().StartNewDialogue("Enemy attacked!");
-
-    //    if (playerRef.GetComponent<CombatAttributes>().GetShouldPlayDamageReceivedAnim())    //if dice roll and dodge status allows playing of damaged recieved anim, play it.
-    //        GetComponent<BattleManager>().GetPlayerAnimator().SetTrigger("Normal");
-
-    //    playerRef.GetComponent<CombatAttributes>().DecreaseHealth(enemyRef.GetComponent<CombatAttributes>().GetDamageDealNormal());     //deal the damage to the player
-    //}
-
-
-    //#endregion
+   
 
     private void GetConditionalAttributes()
     {

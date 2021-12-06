@@ -15,6 +15,11 @@ public class CombatAttributes : MonoBehaviour
 
     #endregion
 
+    [SerializeField]
+    public CombatAttributeModifier defaultBehaviourModifier;
+    [SerializeField]
+    public CombatAttributeModifier behaviourModifier;
+
     #region healthVars
     [Header("Health Vars")]
     [SerializeField]
@@ -65,10 +70,18 @@ public class CombatAttributes : MonoBehaviour
     {
 
         float diceRoll = Random.Range(0.0f, 1.5f);
-        if (diceRoll <= likelihoodOfDodgeAttempt)  
+
+        Debug.Log("AttempingDodge Dice: " + diceRoll + " / " + likelihoodOfDodgeAttempt);
+        if (diceRoll <= likelihoodOfDodgeAttempt)
+        {
+            Debug.Log("Allow Dodge");
             return true;
+        }
         else
+        {
+            Debug.Log("Disallow Dodge");
             return false;
+        }
     }
 
     public void SetAttemptDodgeAttack(bool b)
@@ -142,7 +155,7 @@ public class CombatAttributes : MonoBehaviour
     protected float thresholdForFleeing = 0.5f;         //how little health entity will require before the option to flee becomes available.
 
     [SerializeField]
-    protected float successFleeingChance = 0.25f;       //how likely it is the entity will sucessfully flee and end the battle (>= 1 for always, <= 0 for never)
+    protected float successFleeingChance = 0.6f;       //how likely it is the entity will sucessfully flee and end the battle (>= 1 for always, <= 0 for never)
 
     public float GetLikelihoodOfChoosingFlee()
     {
@@ -276,6 +289,4 @@ public class CombatAttributes : MonoBehaviour
 
 
 
-
-    
 }

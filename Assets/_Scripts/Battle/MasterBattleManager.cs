@@ -23,6 +23,21 @@ public class MasterBattleManager : MonoBehaviour
 {
 
 
+    [SerializeField]
+    public CombatAttributeModifier ScareRef;
+
+    [SerializeField]
+    public CombatAttributeModifier GlueRef;
+
+    [SerializeField]
+    public CombatAttributeModifier DefaultBehaviourRef;
+
+    [SerializeField]
+    private GameObject BattleUIRef;
+    [SerializeField]
+    private Image backgroundImageRef;
+
+    public int turnsUntilPlayerSpecialAllowed = 0;
 
     //player stuffs
     [SerializeField]
@@ -62,7 +77,6 @@ public class MasterBattleManager : MonoBehaviour
     [SerializeField]
     Animator sceneTransitionOut;
 
-    //turn information
     public bool playerTurn = true;
 
     public AudioSource attackNormal;
@@ -77,25 +91,49 @@ public class MasterBattleManager : MonoBehaviour
         playerActionThisTurn = choiceAction.unassigned;
     }
 
+    //STEP BOOT
+    public void BootUp()
+    {
+        GetComponent<PlayerInput>().SetPlayerButtonsClickable(false);
+        StartCoroutine(FirstTurnPlayer(2));
+    }
+
+    IEnumerator FirstTurnPlayer(float amountToDelay)
+    {
+
+        
+
+        yield return new WaitForSeconds(1.5f);
+
+        DialogueManager.GetInstance().StartNewDialogue("The battle begins! What will you do?");
+
+        yield return new WaitForSeconds(2.0f);
+        GetComponent<PlayerInput>().SetPlayerButtonsClickable(true);
+
+    }
+
     //STEP SETUP  A new battle has begun. Setup some standard stuff before we officially begin!
     public void SetUpNewBattle(GameObject passedEnemyRef, Encounter passedEncounter)
     {
+       
+        initialEncounter = passedEncounter;
+        enemyCombatAttributes = enemyRef.GetComponent<CombatAttributes>();
+        playerCombatAttributes = playerRef.GetComponent<CombatAttributes>();
+
         if (OurAudioSource.instance != null)
             OurAudioSource.instance.ChangeTrack(Track.Battle);
-        //assign some stuff
+
+        enemyStatsCanvas.GetComponentInChildren<HandleHearts>().SetPlayerRef(enemyRef);
+        enemyStatsCanvas.SetActive(true);
+        playerStatsCanvas.SetActive(true);
+
         enemyRef = passedEnemyRef;
-        enemyCombatAttributes = enemyRef.GetComponent<CombatAttributes>();
-        initialEncounter = passedEncounter;
-        playerCombatAttributes = playerRef.GetComponent<CombatAttributes>();
+        enemyImage.enabled = true;
+
         enemyResponseRef = GetComponent<EnemyResponse>();
         enemyResponseRef.enemyRef = enemyRef;
-        enemyStatsCanvas.SetActive(true);       //stop rendering enemy stats canvas
-        enemyStatsCanvas.GetComponentInChildren<HandleHearts>().SetPlayerRef(enemyRef);
-        playerStatsCanvas.SetActive(true);       //stop rendering enemy stats canvas
-        //first off, disable the player's overworld hearts UI
         overworldGameGUI.gameObject.SetActive(false);
         BeginPlayerTurn();
-
     }
 
 
@@ -105,7 +143,6 @@ public class MasterBattleManager : MonoBehaviour
     {
         GetComponent<PlayerInput>().SetPlayerButtonsClickable(true);
         playerActionThisTurn = choiceAction.unassigned;
-        playerActionThisTurn = choiceAction.unassigned;
     }
 
 
@@ -113,57 +150,97 @@ public class MasterBattleManager : MonoBehaviour
     public void PlayerChoseAction(choiceAction actionOfChoice)
     {
         playerActionThisTurn = actionOfChoice;      //save the selected action the player chose. We may need it for later!
-        GetComponent<PlayerInput>().SetPlayerButtonsClickable(false); //player action buttons no longer clickable
+        
 
 
-        switch (actionOfChoice)     //go to the corresponding function for handling each action
+        if(playerActionThisTurn == choiceAction.flee)
+        {
+            if (Random.Range(0.0f, 1.0f) <= playerRef.GetComponent<CombatAttributes>().GetSuccessFleeingChance())    //if a random float between 0 inclusive and 1 inclusive is LESS OR EQUAL to successFleeingChance then fleeing is considered a success and battle should end.
+                playerActionThisTurn = choiceAction.flee;
+            else
+                playerActionThisTurn = choiceAction.fleeFail;
+        }
+
+        switch (playerActionThisTurn)     //go to the corresponding function for handling each action
         {
             case choiceAction.attack:
                 {
                     //attackNormal.Play();
                     //playerAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Attacks!");
-                    break;
-                }
-            case choiceAction.special:
-                {
-                    //attackSpecial.Play();
-                    //playerAnim.SetTrigger("Critical"); //NEED NEW ANIMATION HERE
-                    DialogueManager.GetInstance().StartNewDialogue("Player Attacks Special!");
+                    StartCoroutine(delayEndOfPlayerTurn(2));
                     break;
                 }
             case choiceAction.heal:
                 {
                     heal.Play();
                     playerAnim.SetTrigger("Heal");
-                    //playerCombatAttributes.IncreaseHealth(playerCombatAttributes.GetHealAmount());
+                    playerCombatAttributes.IncreaseHealth(playerCombatAttributes.GetHealAmount());
                     DialogueManager.GetInstance().StartNewDialogue("Player Heals!");
                     playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.heal);
+                    StartCoroutine(delayEndOfPlayerTurn(2));
                     break;
                 }
             case choiceAction.dodge:
                 {
-                    dodge.Play();
-                    playerAnim.SetTrigger("Dodge"); //NEED NEW ANIMATION HERE
+                    //dodge.Play();
+                    //playerAnim.SetTrigger("Dodge"); //NEED NEW ANIMATION HERE
                     DialogueManager.GetInstance().StartNewDialogue("Player Prepares To Dodge!");
                     playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
                     playerCombatAttributes.SetAttemptDodgeAttack(true);
+                    StartCoroutine(delayEndOfPlayerTurn(2));
+                    break;
+                }
+            case choiceAction.fleeFail:
+                {
+                    dodge.Play();
+                    DialogueManager.GetInstance().StartNewDialogue("Player Flee Failed!");
+                    StartCoroutine(delayEndOfPlayerTurn(1));
+                    break;
+                }
+            case choiceAction.flee:
+                {
+                    dodge.Play();
+                    DialogueManager.GetInstance().StartNewDialogue("Player Flees Successfully!");
+                    StartCoroutine(delayEndOfPlayerTurn(2));
+                    ShutdownBattle();
+                    break;
+                }
+            case choiceAction.specialScare:
+                {
+                    turnsUntilPlayerSpecialAllowed = 2;
+                    enemyRef.GetComponent<CombatAttributes>().behaviourModifier = ScareRef;
+                    //enemyRef.GetComponent<CombatAttributes>().SetActiveBehaviourModifier(ScareRef);
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    DialogueManager.GetInstance().StartNewDialogue("Player SCARES the enemy! Enemy will try to run away this turn!");
+                    StartCoroutine(delayEndOfPlayerTurn(2));
+                    break;
+                }
+            case choiceAction.specialGlue:
+                {
+                    turnsUntilPlayerSpecialAllowed = 3;
+                    enemyRef.GetComponent<CombatAttributes>().behaviourModifier = GlueRef;
+                    //enemyRef.GetComponent<CombatAttributes>().SetActiveBehaviourModifier(ScareRef);
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    DialogueManager.GetInstance().StartNewDialogue("Player GLUES the enemy! Enemy cannot dodge for next 3 turns!");
+                    StartCoroutine(delayEndOfPlayerTurn(2));
                     break;
                 }
             default:
                 {
+                    StartCoroutine(delayEndOfPlayerTurn(2));
                     break;
                 }
         }
 
 
-        StartCoroutine(delayEndOfPlayerTurn(2));
     }
 
 
     //STEP 03 Game waits while text is displayed and animation of player's action is played from step 2. Next step begins with BeginEnemyTurn and is run after waiting.
     IEnumerator delayEndOfPlayerTurn(float amountToDelay)
     {
+        GetComponent<PlayerInput>().SetPlayerButtonsClickable(false); //player action buttons no longer clickable
         //Debug.Log("Started Player Wait");
         yield return new WaitForSeconds(amountToDelay);
         //Debug.Log("Finished Player Wait");
@@ -177,17 +254,24 @@ public class MasterBattleManager : MonoBehaviour
     //STEP 04a Enemy begins by attempting to dodge. Step 04b EnemyTryDodge() is where the enemy checks if it is allowed to dodge this turn. If so, the rest of the enemy's turn is skipped. If no dodging, we continue.
     public void BeginEnemyTurn()
     {
+        //playerActionThisTurn is used to tell the enemy how to react to the player's turn. If player dodges, we don't want the enemy to automatically dodge aswell. Therefore, we set the enemy's response via the var playerActionThisTurn to be none under this circumstance
+        if (playerActionThisTurn == choiceAction.dodge || playerActionThisTurn == choiceAction.dodgeFail)
+        {
+            Debug.Log("player dodges, setting player's choiceaction to none now");
+            playerActionThisTurn = choiceAction.none;
+        }
+
         if (enemyRef.GetComponent<CombatAttributes>().canDodge) //enemy will always try dodging!
         {
-            ////Debug.Log("ENEMY CHECKING IF CAN DODGE");
+            Debug.Log("ENEMY CHECKING IF CAN DODGE");
             EnemyTryDodge();
         }
 
-        ////Debug.Log("ENEMY DESCIDING ON ACTION!");
+
         enemyActionThisTurn = enemyResponseRef.EnemyRespond();  //got to enemyRespond and fid out enemy's move to make
                                                                 ////Debug.Log("ENEMYRESPOND SAYS: " + enemyActionThisTurn);
 
-        ////Debug.Log("ENEMY AFTER DESCIDING ON ACTION WANTS TO: " + enemyActionThisTurn);
+
 
         PlayerActionConsequencesForEnemy(); //enemy now knows what its turn will be. Still, we gotta actually go through the motions of the conseqeunces of the player's turn
     }
@@ -196,8 +280,12 @@ public class MasterBattleManager : MonoBehaviour
     //STEP 04b
     public void EnemyTryDodge()
     {
+        if (playerActionThisTurn != choiceAction.attack)
+            return;
+
         if (enemyRef.GetComponent<CombatAttributes>().RollDiceForDodgeAttempt()) //are we dodging at ALL this turn?
         {
+
             //Debug.Log("Enemy allowed to try to dodge!");
             if (enemyRef.GetComponent<CombatAttributes>().RollDiceForDodgeSuccess())   //We're dodging! Lets see if the dodge works or not!
             {
@@ -210,7 +298,7 @@ public class MasterBattleManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Enemy attempt for dodge failed!");
+            Debug.Log("Enemy attempt for dodge failed!");
         }
     }
 
@@ -238,25 +326,8 @@ public class MasterBattleManager : MonoBehaviour
                         DialogueManager.GetInstance().StartNewDialogue("Enemy Takes FATAL Damage!");
                         ShutdownBattle();
                     }
-                    break;
-                }
-            case choiceAction.special:
-                {
-                    if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
-                    {
-                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
-                        attackSpecial.Play();
-                        enemyAnim.SetTrigger("Critical");
-                        DialogueManager.GetInstance().StartNewDialogue("Enemy Takes Special Damage!");
-                    }
-                    else
-                    {
-                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
-                        attackSpecial.Play();
-                        enemyAnim.SetTrigger("Critical");
-                        DialogueManager.GetInstance().StartNewDialogue("Enemy Takes FATAL Special Damage!");
-                        ShutdownBattle();
-                    }
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(2.0f));
                     break;
                 }
             case choiceAction.dodge:
@@ -266,36 +337,48 @@ public class MasterBattleManager : MonoBehaviour
                     enemyAnim.SetTrigger("Dodge");
                     DialogueManager.GetInstance().StartNewDialogue("Enemy dodges!");
                     enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(2.0f));
                     break;
                 }
             case choiceAction.dodgeFail:
                 {
                     //Debug.Log("TRYING DODGEFAILED");
 
-                    if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
+                    if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealNormal()))
                     {
                         DialogueManager.GetInstance().StartNewDialogue("Enemy failed to dodge!");
+                        attackNormal.Play();
+                        enemyAnim.SetTrigger("Normal");
+                        enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
                     }
                     else
                     {
-                        DialogueManager.GetInstance().StartNewDialogue("Enemy Takes FATAL Special Damage!");
-                        ShutdownBattle();
+                        DialogueManager.GetInstance().StartNewDialogue("Enemy Takes FATAL Damage!");
                     }
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(2.0f));
+                    break;
+                }
+            case choiceAction.heal:
+                {
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(0.1f));
+                }
+                break;
+            case choiceAction.none:
+                {
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(0.1f));
                     break;
                 }
             default:
                 {
+                    playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
+                    StartCoroutine(delayStartOfEnemyTurn(2));
                     break;
                 }
         }
-
-
-
-
-
-
-        playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
-        StartCoroutine(delayStartOfEnemyTurn(2));
     }
 
     IEnumerator delayStartOfEnemyTurn(float amountToDelay)
@@ -309,12 +392,34 @@ public class MasterBattleManager : MonoBehaviour
             case choiceAction.attack:
                 {
                     DialogueManager.GetInstance().StartNewDialogue("Enemy Attacks Normal!");
+                    StartCoroutine(delay2EndOfEnemyTurn(2));
                     break;
                 }
-
+            case choiceAction.heal:
+                {
+                    heal.Play();
+                    enemyAnim.SetTrigger("Heal");
+                    enemyCombatAttributes.IncreaseHealth(playerCombatAttributes.GetHealAmount());
+                    DialogueManager.GetInstance().StartNewDialogue("Enemy Heals!");
+                    enemyImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.heal);
+                    StartCoroutine(delay2EndOfEnemyTurn(1));
+                    break;
+                }
+            case choiceAction.flee:
+                {
+                    DialogueManager.GetInstance().StartNewDialogue("Enemy Flees!");
+                    ShutdownBattle();
+                    break;
+                }
+            case choiceAction.fleeFail:
+                {
+                    DialogueManager.GetInstance().StartNewDialogue("Enemy tries to flee but fails!");
+                    StartCoroutine(delay2EndOfEnemyTurn(2));
+                    break;
+                }
         }
 
-        StartCoroutine(delay2EndOfEnemyTurn(2));
+ 
 
     }
 
@@ -329,58 +434,48 @@ public class MasterBattleManager : MonoBehaviour
     //STEP 06 Now we're free for the enemy to make their move. Enemy already knows what that move is, so we just have to apply it!
     public void EnemyActionConsequencesForPlayer()
     {
+        enemyRef.GetComponent<CombatAttributes>().behaviourModifier.decrementNumOfTurns();
+        
+        
         switch (enemyActionThisTurn)
         {
             case choiceAction.attack:
                 {
                     if (playerCombatAttributes.GetattemptDodgeAttack())
                     {
+                        dodge.Play();
                         playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
                         playerAnim.SetTrigger("Dodge");
                         DialogueManager.GetInstance().StartNewDialogue("Player Dodges Enemy's Attack!");
-                        playerCombatAttributes.SetAttemptDodgeAttack(false);
                     }
                     else
                     {
                         if (playerCombatAttributes.DecreaseHealth(enemyCombatAttributes.GetDamageDealNormal()))
                         {
-
+                            attackNormal.Play();
                             playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
                             playerAnim.SetTrigger("Normal");
                             DialogueManager.GetInstance().StartNewDialogue("Player Takes Normal Damage!");
                         }
                         else
                         {
+                            attackNormal.Play();
                             playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
                             playerAnim.SetTrigger("Normal");
                             DialogueManager.GetInstance().StartNewDialogue("Player Takes FATAL Damage!");
                             ShutdownBattle();
                         }
                     }
-                    break;
-
-
-
-                }
-            case choiceAction.special:
-                {
-                    if (enemyCombatAttributes.DecreaseHealth(playerCombatAttributes.GetDamageDealSpecial()))
-                    {
-                        playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
-                        playerAnim.SetTrigger("Critical");
-                        DialogueManager.GetInstance().StartNewDialogue("Player Takes Special Damage!");
-                    }
-                    else
-                    {
-                        playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
-                        playerAnim.SetTrigger("Critical");
-                        DialogueManager.GetInstance().StartNewDialogue("Player Takes FATAL Special Damage!");
-                        ShutdownBattle();
-                    }
+                    playerCombatAttributes.SetAttemptDodgeAttack(false);
+                    enemyActionThisTurn = choiceAction.unassigned;
+                    StartCoroutine(delayEndOfEnemyTurn(2));
                     break;
                 }
             default:
                 {
+                    playerCombatAttributes.SetAttemptDodgeAttack(false);
+                    enemyActionThisTurn = choiceAction.unassigned;
+                    StartCoroutine(delayEndOfEnemyTurn(0.01f));
                     break;
                 }
         }
@@ -389,19 +484,24 @@ public class MasterBattleManager : MonoBehaviour
 
 
 
-        playerCombatAttributes.SetAttemptDodgeAttack(false);
-        enemyActionThisTurn = choiceAction.unassigned;
-        StartCoroutine(delayEndOfEnemyTurn(2));
+        
     }
 
     //STEP 07 Add a delay so that the enemy text and animation from step 06 have time to go through their motions.
     IEnumerator delayEndOfEnemyTurn(float amountToDelay)
     {
+
+        if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.numberOfTurnsAffectedByModifier <= 0)
+            enemyRef.GetComponent<CombatAttributes>().behaviourModifier = DefaultBehaviourRef;
+
+        if (turnsUntilPlayerSpecialAllowed > 0)
+            turnsUntilPlayerSpecialAllowed--;
         //Debug.Log("Started Wait");
         yield return new WaitForSeconds(amountToDelay);
         //Debug.Log("Finished Wait");
 
         DialogueManager.GetInstance().StartNewDialogue("What will you do?");
+        yield return new WaitForSeconds(1.5f);
         BeginPlayerTurn();
     }
 
@@ -415,8 +515,11 @@ public class MasterBattleManager : MonoBehaviour
         enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
         GetComponent<PlayerInput>().SetPlayerButtonsClickable(false);       //disable buttons clicability
         sceneTransitionOut.SetTrigger("Exit");  //play exit anim
+        
+        if (OurAudioSource.instance != null)
+            OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
 
-        OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
+
         if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
         {
             // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
@@ -428,28 +531,6 @@ public class MasterBattleManager : MonoBehaviour
             Destroy(initialEncounter.gameObject, 0.5f);
         }
     }
-
-    ////public void ShutdownBattle()
-////////    {
-////////        OurAudioSource.instance.ChangeTrack(Track.OverworldFromBattle);
-////////        StopAllCoroutines();                    //stop all coroutines (timer for enemy)
-////////        inBattle = false;                       //battle has stopped. This bool disallows further actions from taking place in wait coroutine.
-////////        enemyImage.enabled = false;             //stop rendering enemy image
-////////        enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
-////////        SetPlayerButtonsClickable(false);       //disable buttons clicability
-////////        playerRef.GetComponent<CombatAttributes>().SpecialWindUpReset();    //reset special wind-up count
-////////        playerAttackSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Wind Up\nSpecial");    //reset special attack button to default text
-////////        sceneTransitionOut.SetTrigger("Exit");  //play exit anim
-////////        if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
-////////        {
-////////            // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
-////////            // we need to switch camera priorities before destroying the battle.
-
-    ////////            battleRef.camera.Priority -= 2;
-    ////////            // Wait for the battle to shutdown before destroying the references used in this script
-    ////////            Destroy(battleRef.gameObject, 0.5f);
-    ////////        }
-    ////////    }
 
 
     public void OnDialogueEnded()

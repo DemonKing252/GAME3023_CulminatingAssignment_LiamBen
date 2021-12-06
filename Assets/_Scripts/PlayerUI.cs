@@ -24,7 +24,8 @@ public class PlayerUI : MonoBehaviour
     public void ShowEncounter()
     {
         encounterCanvas.gameObject.SetActive(true);
-//        FindObjectOfType<BattleManager>().StartUp();    // brute force approach
+        encounterCanvas.gameObject.GetComponentInChildren<MasterBattleManager>().BootUp();
+        //FindObjectOfType<BattleManager>().gameObject.SetActive(true);    // brute force approach
 
 
         playerui.SetActive(false);

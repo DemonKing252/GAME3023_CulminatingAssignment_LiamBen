@@ -59,17 +59,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: Amogus
+  defaultBehaviourModifier: {fileID: 11400000, guid: 81a903eced9da92408b04ff2f00990d1, type: 2}
+  behaviourModifier: {fileID: 11400000, guid: 81a903eced9da92408b04ff2f00990d1, type: 2}
   health: 3
   maxHealth: 3
   healthPassiveRegen: 0.25
   healAmount: 1
+  activeBehaviourModifier: {fileID: 0}
   likelihoodOfDodgeAttack: 0.3
   likelihoodOfReceivedCriticalHit: 0.2
+  likelihoodOfDodgeAttempt: 0.3
   criticalHitReceivedMultiplier: 1.5
+  canDodge: 1
   damageDealNormal: 1
   damageDealSpecial: 2
-  likelihoodOfFleeing: 0.1
+  specialWindUpRequiredForAttack: 1
+  specialWindUpCapacity: 1
+  likelihoodOfChoosingFlee: 0.3
   thresholdForFleeing: 0.5
+  successFleeingChance: 0.6
   deathMessage: ' has died!'
   damageDealNormalMessage: ' has attacked!'
   damageDealSpecialMessage: ' has used Special attack!'
