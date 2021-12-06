@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Encounter : MonoBehaviour
 {
+    public bool guarenteeEncounter = false;
     public GameObject selectedEnemy;
     public GameObject enemyNameUI;
 
@@ -22,18 +23,18 @@ public class Encounter : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerController>() != null)
-        {
-            // 50% chance to happen
-            if (Random.Range(1, 3) == 2)
-                return;
+            if (!guarenteeEncounter && collision.gameObject.GetComponent<PlayerController>() != null)
+            {
+                // 50% chance to happen
+                if (Random.Range(1, 3) == 2)
+                    return;
 
-            // If the player is moving at a decent speed
-            if (collision.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody2D>().velocity.magnitude < 0.4f)
-                return;
+                // If the player is moving at a decent speed
+                if (collision.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody2D>().velocity.magnitude < 0.4f)
+                    return;
 
-            // If the above (inverse) condtions are met, we let the battle happen
-        }
+                // If the above (inverse) condtions are met, we let the battle happen
+            }
 
         ChooseRandomEnemy();
         camera.Priority += 2;

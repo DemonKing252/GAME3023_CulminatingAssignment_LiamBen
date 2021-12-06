@@ -13531,6 +13531,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1046078034}
     - target: {fileID: 986703464852217747, guid: 24ef966a14665054892c92cee995c246, type: 3}
+      propertyPath: guarenteeEncounter
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 986703464852217747, guid: 24ef966a14665054892c92cee995c246, type: 3}
       propertyPath: crossfadeTransition
       value: 
       objectReference: {fileID: 915498168075303829}

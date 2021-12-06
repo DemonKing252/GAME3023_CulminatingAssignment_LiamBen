@@ -80,7 +80,8 @@ public class MasterBattleManager : MonoBehaviour
     //STEP SETUP  A new battle has begun. Setup some standard stuff before we officially begin!
     public void SetUpNewBattle(GameObject passedEnemyRef, Encounter passedEncounter)
     {
-        OurAudioSource.instance.ChangeTrack(Track.Battle);
+        if (OurAudioSource.instance != null)
+            OurAudioSource.instance.ChangeTrack(Track.Battle);
         //assign some stuff
         enemyRef = passedEnemyRef;
         enemyCombatAttributes = enemyRef.GetComponent<CombatAttributes>();
