@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyResponse : MonoBehaviour
 {
+    private CombatAttributeModifier behaviourModifier;
+
     [SerializeField]
     public GameObject enemyRef;
     [SerializeField]
@@ -11,7 +13,7 @@ public class EnemyResponse : MonoBehaviour
 
     choiceAction enemyActionToTake;
 
-    #region conditionalAttributes that affect descision making
+    #region conditionalAttributes that affect decision making
     private float playerHealth;
     private float playerMaxHealth;
     private bool playerIsChargingAttack;
@@ -23,37 +25,40 @@ public class EnemyResponse : MonoBehaviour
     #endregion
 
     #region weightingVars
-    private float descisionWeightFlee = 0;
-    private float descisionWeightDodge = 0;
-    private float descisionWeightAttack = 0;
-    private float descisionWeightAttackSpecial = 0;
-    private float descisionWeightHeal = 0;
+    private float decisionWeightFlee = 0;
+    private float decisionWeightDodge = 0;
+    private float decisionWeightAttack = 0;
+    private float decisionWeightAttackSpecial = 0;
+    private float decisionWeightHeal = 0;
 
-    private void ResetDescisionVals()
+    private void ResetdecisionVals()
     {
-        descisionWeightFlee = 0;
-        descisionWeightDodge = 0;
-        descisionWeightAttack = 0;
-        descisionWeightAttackSpecial = 0;
-        descisionWeightHeal = 0;
+        decisionWeightFlee = 0;
+        decisionWeightDodge = 0;
+        decisionWeightAttack = 0;
+        decisionWeightAttackSpecial = 0;
+        decisionWeightHeal = 0;
     }
     #endregion
 
     public choiceAction EnemyRespond()
     {
-        return choiceAction.attack;
+        //return choiceAction.attack;
+        if (behaviourModifier != null)
+        {
+            Debug.Log("ENEMY INFLUENCED!!!!");
+        }
 
-
-        //first we'll get all the information we require to make a descision
+        //second we'll get all the information we require to make a decision
         GetConditionalAttributes();
         //then we decide what action to take
         return EnemyDecideAction();
     }
 
-    private choiceAction EnemyDecideAction()
+    private void EnemyCalculateAction()
     {
-        //Each descision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
-        ResetDescisionVals();
+        //Each decision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
+        ResetdecisionVals();
 
 
         #region Handle Healing Possibility
@@ -61,56 +66,66 @@ public class EnemyResponse : MonoBehaviour
         if (enemyHealth < enemyMaxHealth)
         {
             //Health Comparison Influences
-            if (enemyHealth < enemyMaxHealth / 2) descisionWeightHeal++;            //enemy under 1/2 health, add single point
-            if (enemyHealth < enemyMaxHealth / 3) descisionWeightHeal += 2.0f;        //enemy under 1/3 health, add total of 3 points
-            if (enemyHealth < enemyMaxHealth / 4) descisionWeightHeal += 2.0f;        //enemy under 1/4 health, add total of 5 points
+            if (enemyHealth < enemyMaxHealth / 2) decisionWeightHeal++;            //enemy under 1/2 health, add single point
+            if (enemyHealth < enemyMaxHealth / 3) decisionWeightHeal += 2.0f;        //enemy under 1/3 health, add total of 3 points
+            if (enemyHealth < enemyMaxHealth / 4) decisionWeightHeal += 2.0f;        //enemy under 1/4 health, add total of 5 points
 
 
-            if (enemyHealth < playerHealth) descisionWeightHeal += 1.5f;              //enemy has less health than player and is thus losing. Add 1.5 more points.
+            if (enemyHealth < playerHealth) decisionWeightHeal += 1.5f;              //enemy has less health than player and is thus losing. Add 1.5 more points.
 
-            if (!enemyHealsPassively) descisionWeightHeal *= 1.25f;   //enemy doesn't regen health passively, multiply heal likelyhood by 1.25. If all if have passed thus far, Enemy MUST heal as its descisionWeightHeal will be 10!
+            if (!enemyHealsPassively) decisionWeightHeal *= 1.25f;   //enemy doesn't regen health passively, multiply heal likelyhood by 1.25. If all if have passed thus far, Enemy MUST heal as its decisionWeightHeal will be 10!
         }
         #endregion
 
         #region Handle Attacking Possibility
         //Health Comparison Influences
-        if (playerHealth < playerMaxHealth / 1.5) descisionWeightAttack++;              //player under  2/3 health, add single point
-        if (playerHealth < playerMaxHealth / 2) descisionWeightAttack++;                //player under under 1/2 health, add total of 2 points
-        if (playerHealth < playerMaxHealth / 3) descisionWeightAttack += 2;             //player under under 1/3 health, add total of 4 points
-        if (playerHealth < playerMaxHealth / 4) descisionWeightAttack += 2;             //player under under 1/4 health, add total of 6 points
+        if (playerHealth < playerMaxHealth / 1.5) decisionWeightAttack++;              //player under  2/3 health, add single point
+        if (playerHealth < playerMaxHealth / 2) decisionWeightAttack++;                //player under under 1/2 health, add total of 2 points
+        if (playerHealth < playerMaxHealth / 3) decisionWeightAttack += 2;             //player under under 1/3 health, add total of 4 points
+        if (playerHealth < playerMaxHealth / 4) decisionWeightAttack += 2;             //player under under 1/4 health, add total of 6 points
 
 
         if (enemyHealth < playerHealth)
-            descisionWeightAttack += 3;                                                 //enemy has less health than player. Add 2 points to attacking.
+            decisionWeightAttack += 3;                                                 //enemy has less health than player. Add 2 points to attacking.
         else
-            descisionWeightAttack += 2;                                                    //enemy has more health than player. Add 2 points to attacking. (guarentees at least a weight of 2 for attacking)
+            decisionWeightAttack += 2;                                                    //enemy has more health than player. Add 2 points to attacking. (guarentees at least a weight of 2 for attacking)
         #endregion
 
         #region Handle Fleeing Possibility
         if (enemyConsiderFleeing)
         {
-            descisionWeightFlee++;          //if an option, add a single point right off the bat.
+            decisionWeightFlee++;          //if an option, add a single point right off the bat.
 
-            if (enemyHealth < enemyMaxHealth / 3) descisionWeightFlee += 2;    //if enemy under 1/3 health, add another 2 points
-            if (enemyHealth < enemyMaxHealth / 4) descisionWeightFlee += 2;    //if enemy under 1/4 health, add another 1 point
+            if (enemyHealth < enemyMaxHealth / 3) decisionWeightFlee += 2;    //if enemy under 1/3 health, add another 2 points
+            if (enemyHealth < enemyMaxHealth / 4) decisionWeightFlee += 2;    //if enemy under 1/4 health, add another 1 point
 
             //NOTE: fleeing doesn't sum to 10! Instead it'll sum to 4! This is so there is at most a 4/10 chance of enemy ATTEMPTING to flee!
         }
         #endregion
 
+    }
+
+    private choiceAction EnemyDecideAction()
+    {
+        //ok so lets figure out what each decision weights are...
+        EnemyCalculateAction();
+
+
+        //Now we go through all decision options one-by-one to determine an action! Each decision is weighted in the above function
+
 
         //THIS ORDER IS IMPORTANT! FLEE->HEAL->ATTACK->DODGE->ATTACKSPECIAL
-        //Each descion weight maxes at 10 (except flee that maxes out at 5). Highest range of random maxes at 15 to ensure enemies can make stategically wrong descisons!
-        if (enemyConsiderFleeing && Random.Range(0.0f, 15.0f) <= descisionWeightFlee)//first action to consider is fleeing.
+        //Each decision weight maxes at 10 (except flee that maxes out at 5). Highest range of random maxes at 15 to ensure enemies can make stategically wrong descisons!
+        if (enemyConsiderFleeing && Random.Range(0.0f, 15.0f) <= decisionWeightFlee)//first action to consider is fleeing.
         {
             //attempt to flee
             return choiceAction.flee;
         }
-        if (descisionWeightHeal > 0 && Random.Range(0.0f, 15.0f) <= descisionWeightHeal)       //second action to consider is healing.
+        if (decisionWeightHeal > 0 && Random.Range(0.0f, 15.0f) <= decisionWeightHeal)       //second action to consider is healing.
         {
             return choiceAction.heal;
         }
-        if (Random.Range(0.0f, 15.0f) <= descisionWeightAttack)     //third action to consider is attacking.
+        if (Random.Range(0.0f, 15.0f) <= decisionWeightAttack)     //third action to consider is attacking.
         {
             return choiceAction.attack;
         }
@@ -189,9 +204,9 @@ public class EnemyResponse : MonoBehaviour
         enemyHealsPassively = false; //unimplemented
     }
 
-    private void PrintDescisionStats()
+    private void PrintdecisionStats()
     {
-        Debug.Log("FLEE: " + descisionWeightFlee + "  ATTCK: " + descisionWeightAttack + "  HEAL: " + descisionWeightHeal);
+        Debug.Log("FLEE: " + decisionWeightFlee + "  ATTCK: " + decisionWeightAttack + "  HEAL: " + decisionWeightHeal);
     }
 
 

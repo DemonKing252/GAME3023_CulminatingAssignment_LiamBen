@@ -263,7 +263,6 @@ public class CombatAttributes : MonoBehaviour
     {
         return healAmount;
     }
-    #endregion
 
 
     // Saving and loading purposes
@@ -273,6 +272,7 @@ public class CombatAttributes : MonoBehaviour
     }
 
 
+    #endregion
 
 
 
