@@ -53,7 +53,7 @@ public class Encounter : MonoBehaviour
             enemyUI.GetComponent<UIAnimationController>().Refresh();
             FindObjectOfType<PlayerUI>().selectedEncounter = this;
 
-
+            FindObjectOfType<PlayerController>().referencedEncounter = this;
             FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().initialEncounter = this;
             FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().enemyRef = selectedEnemy;
             FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().SetUpNewBattle(selectedEnemy, this);

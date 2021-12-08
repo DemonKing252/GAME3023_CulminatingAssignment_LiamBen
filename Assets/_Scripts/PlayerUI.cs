@@ -20,6 +20,8 @@ public class PlayerUI : MonoBehaviour
 
     void Start()
     {
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("BattleEncounter");
+        Debug.Log(gos.Length + "------- ");
     }
     public void ShowEncounter()
     {
@@ -36,11 +38,15 @@ public class PlayerUI : MonoBehaviour
     }
     public void HideEncounter()
     {
+
         encounterCanvas.gameObject.SetActive(false);
         playerui.SetActive(true);
 
+
         GameObject[] gos = GameObject.FindGameObjectsWithTag("BattleEncounter");
-        if (gos.Length == 0)
+        Debug.Log(gos.Length + "------- ");
+        
+        if (gos.Length <= 1)
             FindObjectOfType<PlayerController>().WinGame();
     }
 }

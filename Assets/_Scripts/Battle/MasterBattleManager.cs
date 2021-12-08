@@ -96,7 +96,19 @@ public class MasterBattleManager : MonoBehaviour
         enemyActionThisTurn = choiceAction.unassigned;
         playerActionThisTurn = choiceAction.unassigned;
     }
-
+    private bool quitAlready = false;
+    public void Update()
+    {
+        // Its okay, were only doing this once
+        if (!quitAlready)
+        {
+            if (playerRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
+            {
+                playerRef.GetComponent<PlayerController>().LoseGame();
+                quitAlready = true;
+            }
+        }
+    }
     //STEP BOOT
     public void BootUp()
     {
@@ -575,6 +587,18 @@ public class MasterBattleManager : MonoBehaviour
         enemyImage.enabled = false;             //stop rendering enemy image
         enemyStatsCanvas.SetActive(false);      //stop rendering enemy stats canvas
         StartCoroutine(ShutdownWaiter());
+
+
+        if (enemyRef.GetComponent<CombatAttributes>().GetHealth() <= 0f)
+        {
+            // Switch back to the original camera, since this object wont call OnExit, since its getting destroyed, 
+            // we need to switch camera priorities before destroying the battle.
+
+            initialEncounter.camera.Priority -= 2;
+            Destroy(initialEncounter.gameObject, 8f);
+            // Wait for the battle to shutdown before destroying the references used in this script
+        }
+        
     }
 
 
@@ -600,7 +624,7 @@ public class MasterBattleManager : MonoBehaviour
 
             initialEncounter.camera.Priority -= 2;
             // Wait for the battle to shutdown before destroying the references used in this script
-            Destroy(initialEncounter.gameObject, 0.5f);
+            Destroy(initialEncounter.gameObject, 10f);
         }
     }
 

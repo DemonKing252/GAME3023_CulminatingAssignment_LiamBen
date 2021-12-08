@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public Button winQuitGameBtn;
     public MasterBattleManager masterBattleMgr;
 
-
+    public Encounter referencedEncounter = null;
 
     public void OnLoadMainMenu()
     {
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
     public void WinGame()
     {
+        Debug.Log("Win the game.");
         // Can't resume game if you win otherwise theres no enemies to kill
         PlayerPrefs.DeleteAll();
         Time.timeScale = 0f;
