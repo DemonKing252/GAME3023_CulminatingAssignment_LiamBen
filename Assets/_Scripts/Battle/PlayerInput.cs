@@ -8,6 +8,8 @@ public enum choiceAction
     attack,
     specialScare,
     specialGlue,
+    specialTrick,
+    specialBleeder,
     dodge,
     dodgeFail,
     heal,
@@ -18,6 +20,7 @@ public enum choiceAction
 }
 public class PlayerInput : MonoBehaviour
 {
+
     [SerializeField]
     private Button playerAttackButton;
 
@@ -34,9 +37,35 @@ public class PlayerInput : MonoBehaviour
     private Button playerFleeButton;
 
     [SerializeField]
+    private Button playerScareButton;
+
+    [SerializeField]
+    private Button playerGlueButton;
+
+    [SerializeField]
+    private Button playerTrickButton;
+
+    [SerializeField]
+    private Button playerBleederButton;
+
+    [SerializeField]
     private GameObject playerSpecialMovesCanvas;
     #region PlayerInputs
 
+    public void UnlockSpecialAbility()
+    {
+        int currentSpecialAbilityStat = 0;
+
+        for (int i = 0; i < GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility.Length; i++)
+        {
+            if (GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[i])
+                currentSpecialAbilityStat++;
+        }
+
+        Debug.Log("NEW SPECIAL ABILITY ELEMENT: " + currentSpecialAbilityStat);
+        if (currentSpecialAbilityStat < GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility.Length)
+            GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[currentSpecialAbilityStat] = true;
+    }
 
     public void SetPlayerButtonsClickable(bool newClickableState)
     {
@@ -51,40 +80,87 @@ public class PlayerInput : MonoBehaviour
             playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Special Move Unavailable \n Unlocks in: " + GetComponent<MasterBattleManager>().turnsUntilPlayerSpecialAllowed);
         }
 
+        HandleSpecialAbilitiesButtonsAvailability();
+
+
         //set buttons interactability based on passed bool
         playerAttackButton.interactable = newClickableState;
         playerDodgeButton.interactable = newClickableState;
         playerFleeButton.interactable = newClickableState;
-
+        playerHealButton.interactable = newClickableState;
         playerSpecialMovesCanvas.SetActive(false);
 
-        //only set health button to be interactable if passed bool is true AND player is NOT at full health!
-        if (newClickableState == true && !GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().GetIsAtFullHealth())
+        //change button text and interactability depending if at full health
+        if (GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().GetIsAtFullHealth())
         {
-            playerHealButton.interactable = true;
-            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Heal");
-            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("You're at \n Full Health");
+            playerHealButton.interactable = false;
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
         }
         else
         {
-            playerHealButton.interactable = false;
-            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("You're at \n Full Health");
-            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Heal");
+            playerHealButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
+    }
+
+    private void HandleSpecialAbilitiesButtonsAvailability()
+    {
+        playerScareButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[0];
+        playerGlueButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[1];
+        playerTrickButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[2];
+        playerBleederButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[3];
+
+
+        //this is really bad. Each special ability should be a scriptable object, but it's kinda too late to go back now...
+        if (playerScareButton.interactable)
+        {
+            playerScareButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Scare");
+            playerScareButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
+        else
+        {
+            playerScareButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Not\nUnlocked\nYet!");
+            playerScareButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
+        }
+
+        if (playerGlueButton.interactable)
+        {
+            playerGlueButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Glue");
+            playerGlueButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
+        else
+        {
+            playerGlueButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Not\nUnlocked\nYet!");
+            playerGlueButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
+        }
+
+        if (playerTrickButton.interactable)
+        {
+            playerTrickButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Trick");
+            playerTrickButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
+        else
+        {
+            playerTrickButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Not\nUnlocked\nYet!");
+            playerTrickButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
+        }
+
+        if (playerBleederButton.interactable)
+        {
+            playerBleederButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Large\nAttack");
+            playerBleederButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+        }
+        else
+        {
+            playerBleederButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Not\nUnlocked\nYet!");
+            playerBleederButton.GetComponentInChildren<TextMeshProUGUI>().fontSize = 7;
         }
     }
 
     public void PlayerInputAttack()
     {
-        Debug.Log("Player Attack Pressed");
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.attack);
-        //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
-
-        //masterBattleManagerRef.enemyAnim.SetTrigger("Normal");
-
-        //if (masterBattleManagerRef.enemyRef.GetComponent<CombatAttributes>().DecreaseHealth(masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().GetDamageDealNormal())) //decrease health of enemy by player's attack damage normal amount. DecreaseHealth returns a bool depicting if entity is alive, so if true (enemy is alive) then run coroutine as normal. If false, entity is dead so shutdown the battle scene.
-        //    StartCoroutine(FinishPlayerTurn()); //this runs if enemy is not killed
-        //else
-        //    ShutdownBattle();   //this runs if the enemy is killed.
     }
 
     public void PlayerInputSpecialMenuToggle()
@@ -107,31 +183,30 @@ public class PlayerInput : MonoBehaviour
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.specialGlue);
     }
 
+    public void PlayerInputSpecialTrick()
+    {
+        GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.specialTrick);
+    }
+
+    public void PlayerInputSpecialBleeder()
+    {
+        GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.specialBleeder);
+    }
+
 
     public void PlayerInputDodge()
     {
-        Debug.Log("Player Dodge Pressed");
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.dodge);
     }
 
     public void PlayerInputHeal()
     {
-        Debug.Log("Player Heal Pressed");
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.heal);
-        //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
-        //masterBattleManagerRef.playerAnim.SetTrigger("Heal");          //play heal animation on the player
-        //DialogueManager.GetInstance().StartNewDialogue("Player heals");
-        //masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().IncreaseHealth(masterBattleManagerRef.playerRef.GetComponent<CombatAttributes>().GetHealAmount());  //heal player by their determined heal amount
-        //StartCoroutine(FinishPlayerTurn());
     }
 
     public void PlayerInputFlee()
     {
-        Debug.Log("Player Flee Pressed");
         GetComponent<MasterBattleManager>().PlayerChoseAction(choiceAction.flee);
-        //if (!masterBattleManagerRef.playerTurn) return;                //quick failsafe for if not the player turn, just return
-        //PlayerAttemptFlee();
-        //StartCoroutine(FinishPlayerTurn());
     }
 
     #endregion

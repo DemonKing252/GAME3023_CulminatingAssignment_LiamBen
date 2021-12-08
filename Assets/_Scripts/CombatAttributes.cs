@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 [System.Serializable]
 public class CombatAttributes : MonoBehaviour
 {
@@ -14,6 +16,10 @@ public class CombatAttributes : MonoBehaviour
     }
 
     #endregion
+
+    [SerializeField]
+    public bool[] hasSpecialAbility = { false, false, false, false };    //this array corresponds to whether player has unlocked specific specialAbilities. Order is as follows: Scare, Glue, Trick, Bleeder (same order as is seen in choiceAction's specials)
+
 
     [SerializeField]
     public CombatAttributeModifier defaultBehaviourModifier;
@@ -38,12 +44,12 @@ public class CombatAttributes : MonoBehaviour
     #region combatReceivedVars
     [Header("Combat Recived Vars")]
     [SerializeField]
-    protected float likelihoodOfDodgeAttack = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
+    public float likelihoodOfDodgeAttack = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
 
     [SerializeField]
     protected float likelihoodOfReceivedCriticalHit = 0.2f;     //how likely the opponent's attack is to land a critical hit (does extra damage) (>= 1 for awlays, <= 0 for never)
     [SerializeField]
-    protected float likelihoodOfDodgeAttempt = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
+    public float likelihoodOfDodgeAttempt = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
     [SerializeField]
     protected float criticalHitReceivedMultiplier = 1.5f;       //how much the crittical hit attack should be multiplied
     #endregion
@@ -59,35 +65,27 @@ public class CombatAttributes : MonoBehaviour
     public bool RollDiceForDodgeSuccess()                                    //Sets up the dodging of an attack. Returns outcome of whether dodge succeeded
     {
 
-        float diceRoll = Random.Range(0.0f, 1.5f);
+        float diceRoll = Random.Range(0.0f, 1.0f);
         if (diceRoll <= likelihoodOfDodgeAttack)  //roll dice... Based on likelihoodOfDodgeAttack, generate random num from 0-1. If generated num is greater than likelihoodOfDodgeAttack, dodge succeeded. Fails if attemptDodgeAttack is false
             return true;                          
         else
             return false;                         
     }
 
-    public bool RollDiceForDodgeAttempt()                                  
-    {
+    //public bool RollDiceForDodgeAttempt()                                  
+    //{
 
-        float diceRoll = Random.Range(0.0f, 1.5f);
+    //    float diceRoll = Random.Range(0.0f, 1.0f);
 
-        Debug.Log("AttempingDodge Dice: " + diceRoll + " / " + likelihoodOfDodgeAttempt);
-        if (diceRoll <= likelihoodOfDodgeAttempt)
-        {
-            Debug.Log("Allow Dodge");
-            return true;
-        }
-        else
-        {
-            Debug.Log("Disallow Dodge");
-            return false;
-        }
-    }
+    //    if (diceRoll <= likelihoodOfDodgeAttempt)
+    //        return true;
+    //    else
+    //        return false;
+    //}
 
     public void SetAttemptDodgeAttack(bool b)
     {
         attemptDodgeAttack = b;
-        Debug.Log("SetAttemptDodgeAttack " + attemptDodgeAttack);
     }
 
     public bool GetattemptDodgeAttack()
@@ -173,30 +171,6 @@ public class CombatAttributes : MonoBehaviour
     }
     #endregion
 
-    #region messageSuffixs
-    [Header("Message Suffix Vars")]                                 //add these to the end of the ParentEntity string when dictating an action to the player
-    
-    [SerializeField]
-    protected string deathMessage = " has died!";                   //message for when this entity dies
-
-    [SerializeField]
-    protected string damageDealNormalMessage = " has attacked!";    //message for when this entity attacks normally
-
-    [SerializeField]
-    protected string damageDealSpecialMessage = " has used Special attack!";    //message for when this entity attacks using a special attack (will want to move this to another script for specific abilities)
-
-    [SerializeField]
-    protected string healMessage = " is healing!";                  //message for when this entity uses the turn to heal
-
-    [SerializeField]
-    protected string criticalHitMessage = " has recieved a Critical Hit!";    //message for when this entity receives a critical hit
-
-    [SerializeField]
-    protected string fleeFailedMessage = " has tried to run away, but failed!";    //message for when this entity attempts to flee and doesn't get lucky with their dice roll
-
-    [SerializeField]
-    protected string fleeSuccessMessage = " has run away!";         //message for when this entity attempts to flee and escapes
-    #endregion
 
     #region animation
     public bool GetShouldPlayDamageReceivedAnim()

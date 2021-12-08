@@ -30,17 +30,13 @@ public class EnemyResponse : MonoBehaviour
 
     #region weightingVars
     private float decisionWeightFlee = 0;
-    private float decisionWeightDodge = 0;
     private float decisionWeightAttack = 0;
-    private float decisionWeightAttackSpecial = 0;
     private float decisionWeightHeal = 0;
 
     private void ResetdecisionVals()
     {
         decisionWeightFlee = 0;
-        decisionWeightDodge = 0;
         decisionWeightAttack = 0;
-        decisionWeightAttackSpecial = 0;
         decisionWeightHeal = 0;
     }
     #endregion
@@ -77,8 +73,6 @@ public class EnemyResponse : MonoBehaviour
 
 
             if (enemyHealth < playerHealth) decisionWeightHeal += 3.0f;              //enemy has less health than player and is thus losing. Add 3.0 more points.
-
-            if (!enemyHealsPassively) decisionWeightHeal *= 1.25f;   //enemy doesn't regen health passively, multiply heal likelyhood by 1.25. If all if have passed thus far, Enemy MUST heal as its decisionWeightHeal will be 10!
         }
     }
 
@@ -181,15 +175,9 @@ public class EnemyResponse : MonoBehaviour
     {
         if (enemyRef.GetComponent<CombatAttributes>().GetHealth() / enemyRef.GetComponent<CombatAttributes>().GetMaxHealth() <      //if monster's health/maxHealth is below flee threshold, return true and allow enemy to consider fleeing.
             enemyRef.GetComponent<CombatAttributes>().GetThresholdForFleeing())
-        {
-            Debug.Log("ALLOW FLEEING");
             return true;   //allow fleeing
-        } 
         else
-        {
-            Debug.Log("NO FLEEING");
             return false;   //disallow fleeing
-        }
     }
 
    
