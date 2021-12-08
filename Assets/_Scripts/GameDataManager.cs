@@ -59,6 +59,9 @@ public class GameData
 
     public List<EnemyCombatAttributes> enemyAttributes = new List<EnemyCombatAttributes>();
 
+
+    public bool[] specialAbilitiesUnlocked = { false, false, false, false };
+
     // Add more save features to this class
     // abilities will go here
     // health will go here
@@ -102,7 +105,9 @@ public class GameDataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+#if UNITY_EDITOR
+    if (Input.GetKeyDown(KeyCode.R)) { ClearAllPlayerPrefs(); }
+#endif
     }
     public void PrepareForSaving()
     {
@@ -133,6 +138,9 @@ public class GameDataManager : MonoBehaviour
 
             gData.enemyAttributes.Add(enemyCombatAttributes);
         }
+        CombatAttributes pCombatAttributes = player.GetComponent<CombatAttributes>();
+        gData.specialAbilitiesUnlocked = pCombatAttributes.hasSpecialAbility;
+
         Debug.Log("[Saving]:" + JsonUtility.ToJson(gData));
 
         PlayerPrefs.SetString(keyCode, JsonUtility.ToJson(gData));
@@ -157,6 +165,7 @@ public class GameDataManager : MonoBehaviour
 
         player.transform.position = new Vector2(gData.playerPosition.x, gData.playerPosition.y);
         player.GetComponent<CombatAttributes>().SetHealth(gData.playerHealth);
+        player.GetComponent<CombatAttributes>().hasSpecialAbility = gData.specialAbilitiesUnlocked;
 
         int cntr = 0;
         foreach(var e in gData.battleAttributes)

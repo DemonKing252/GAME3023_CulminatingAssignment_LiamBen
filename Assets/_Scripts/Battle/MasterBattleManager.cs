@@ -214,6 +214,7 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialScare:
                 {
+
                     turnsUntilPlayerSpecialAllowed = 2;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = ScareRef;
                     playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
@@ -223,6 +224,7 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialGlue:
                 {
+                    
                     turnsUntilPlayerSpecialAllowed = 3;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = GlueRef;
                     playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
