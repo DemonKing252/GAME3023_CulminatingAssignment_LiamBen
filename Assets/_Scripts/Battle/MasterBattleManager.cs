@@ -214,6 +214,10 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialScare:
                 {
+                    attackSpecial.Play();
+                    playerAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
+                    playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.dodge);
+
 
                     turnsUntilPlayerSpecialAllowed = 2;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = ScareRef;
@@ -224,7 +228,11 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialGlue:
                 {
-                    
+                    attackNormal.Play();
+                    playerAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
+                    playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackNormal);
+
+
                     turnsUntilPlayerSpecialAllowed = 3;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = GlueRef;
                     playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
@@ -234,6 +242,10 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialTrick:
                 {
+                    heal.Play();
+                    playerAnim.SetTrigger("Heal"); //NEED NEW ANIMATION HERE
+                    playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.heal);
+
                     turnsUntilPlayerSpecialAllowed = 3;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = TrickRef;
                     playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
@@ -243,6 +255,11 @@ public class MasterBattleManager : MonoBehaviour
                 }
             case choiceAction.specialBleeder:
                 {
+
+                    attackSpecial.Play();
+                    playerAnim.SetTrigger("Normal"); //NEED NEW ANIMATION HERE
+                    playerImage.GetComponentInChildren<UIParticleBurst>().StartBurst(AbilityDamageColor.attackSpecial);
+
                     turnsUntilPlayerSpecialAllowed = 3;
                     enemyRef.GetComponent<CombatAttributes>().behaviourModifier = BleederRef;
                     playerActionThisTurn = choiceAction.unassigned; //reset player action back to unassigned so it can be set during their turn
