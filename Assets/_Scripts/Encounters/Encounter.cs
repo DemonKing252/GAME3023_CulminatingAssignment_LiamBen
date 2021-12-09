@@ -15,6 +15,7 @@ public class Encounter : MonoBehaviour
     public List<GameObject> enemies;
     public GameObject enemyUI;
 
+
     void Start()
     {
         
@@ -54,8 +55,6 @@ public class Encounter : MonoBehaviour
             FindObjectOfType<PlayerUI>().selectedEncounter = this;
 
             FindObjectOfType<PlayerController>().referencedEncounter = this;
-            FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().initialEncounter = this;
-            FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().enemyRef = selectedEnemy;
             FindObjectOfType<PlayerController>().masterBattleMgr.GetComponent<MasterBattleManager>().SetUpNewBattle(selectedEnemy, this);
             enemyNameUI.GetComponent<GetName>().SetEnemyName(selectedEnemy.GetComponent<CombatAttributes>().GetName());
 

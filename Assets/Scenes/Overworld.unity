@@ -899,12 +899,8 @@ MonoBehaviour:
   likelihoodOfDodgeAttack: 0.4
   likelihoodOfReceivedCriticalHit: 0.2
   likelihoodOfDodgeAttempt: 0.3
-  criticalHitReceivedMultiplier: 1.5
   canDodge: 1
   damageDealNormal: 1
-  damageDealSpecial: 2
-  specialWindUpRequiredForAttack: 1
-  specialWindUpCapacity: 1
   likelihoodOfChoosingFlee: 0.3
   thresholdForFleeing: 0.5
   successFleeingChance: 0.25
@@ -26052,30 +26048,23 @@ MonoBehaviour:
   ScareRef: {fileID: 11400000, guid: 70146112620f86e4a9683f76ff204361, type: 2}
   GlueRef: {fileID: 11400000, guid: 11edd50c1bae3fa4a8c0d46b01187030, type: 2}
   TrickRef: {fileID: 11400000, guid: e36b251bc697a70449275e0508c9896e, type: 2}
-  BleederRef: {fileID: 0}
+  BleederRef: {fileID: 11400000, guid: 1b0d70446581bf64d94f1e0d0cc5b051, type: 2}
   DefaultBehaviourRef: {fileID: 11400000, guid: 81a903eced9da92408b04ff2f00990d1, type: 2}
   BattleUIRef: {fileID: 1797629486}
   backgroundImageRef: {fileID: 1527757154}
-  turnsUntilPlayerSpecialAllowed: 0
-  playerRef: {fileID: 1786357295}
-  playerCombatAttributes: {fileID: 5755841317317524609}
-  playerAnim: {fileID: 372829541}
+  overworldGameGUI: {fileID: 1912961521}
   playerImage: {fileID: 372829538}
   playerStatsCanvas: {fileID: 5873259969042267385}
-  enemyCombatAttributes: {fileID: 0}
-  enemyRef: {fileID: 0}
-  enemyAnim: {fileID: 1005643127}
-  enemyResponseRef: {fileID: 0}
   enemyImage: {fileID: 1005643124}
   enemyStatsCanvas: {fileID: 1814977905}
-  initialEncounter: {fileID: 0}
-  overworldGameGUI: {fileID: 1912961521}
-  sceneTransitionOut: {fileID: 915498168075303829}
-  playerTurn: 1
+  playerRef: {fileID: 1786357295}
+  playerAnim: {fileID: 372829541}
+  enemyAnim: {fileID: 1005643127}
   attackNormal: {fileID: 131377}
   attackSpecial: {fileID: 331962185}
   dodge: {fileID: 486690128}
   heal: {fileID: 1523121398}
+  sceneTransitionOut: {fileID: 915498168075303829}
 --- !u!224 &1050802194 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 279022457760460553, guid: b1e4dd6330a58a94396aca98909447aa, type: 3}
@@ -61445,12 +61434,8 @@ MonoBehaviour:
   likelihoodOfDodgeAttack: 0.3
   likelihoodOfReceivedCriticalHit: 0.2
   likelihoodOfDodgeAttempt: 0.3
-  criticalHitReceivedMultiplier: 1.5
   canDodge: 1
   damageDealNormal: 1
-  damageDealSpecial: 2
-  specialWindUpRequiredForAttack: 1
-  specialWindUpCapacity: 1
   likelihoodOfChoosingFlee: 0.3
   thresholdForFleeing: 0.5
   successFleeingChance: 0.25
@@ -63099,17 +63084,6 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 2480451656422773964, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
   m_PrefabInstance: {fileID: 5755841317317524607}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5755841317317524609 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5346572897469620950, guid: 797b91fe47c3c024e9ef377d2382e20a, type: 3}
-  m_PrefabInstance: {fileID: 5755841317317524607}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786357295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ec92c60b46d80d438e71cabb234e3f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5873259969042267384
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,28 +4,44 @@ using UnityEngine;
 
 public class EnemyResponse : MonoBehaviour
 {
-
-    //[SerializeField]
-    //private CombatAttributeModifier defaultBehaviourModifier;
-    //[SerializeField]
-    //public CombatAttributeModifier behaviourModifier;
+    #region Refs
 
     [SerializeField]
     public GameObject enemyRef;
     [SerializeField]
     private GameObject playerRef;
 
+    #endregion
+
     choiceAction enemyActionToTake;
+
+    #region setupForResponse
+    private void GetConditionalAttributes()
+    {
+        playerHealth = playerRef.GetComponent<CombatAttributes>().GetHealth();
+        playerMaxHealth = playerRef.GetComponent<CombatAttributes>().GetMaxHealth();
+        enemyHealth = enemyRef.GetComponent<CombatAttributes>().GetHealth();
+        enemyMaxHealth = enemyRef.GetComponent<CombatAttributes>().GetMaxHealth();
+        enemyConsiderFleeing = CheckAllowEnemyFlee(); //check if fleeing the battle is an option or not.
+    }
+
+    public choiceAction EnemyRespond()
+    {
+        //first we'll get all the information we require to make a decision
+        GetConditionalAttributes();
+        //then we decide what action to take
+        choiceAction enemyDecision = EnemyDecideAction();
+        return enemyDecision;
+    }
+
+    #endregion
 
     #region conditionalAttributes that affect decision making
     private float playerHealth;
     private float playerMaxHealth;
-    private bool playerIsChargingAttack;
     private float enemyHealth;
     private float enemyMaxHealth;
-    private bool enemyIsChargingAttack;
     private bool enemyConsiderFleeing;
-    private bool enemyHealsPassively;
     #endregion
 
     #region weightingVars
@@ -41,19 +57,7 @@ public class EnemyResponse : MonoBehaviour
     }
     #endregion
 
-    public choiceAction EnemyRespond()
-    {
-
-        //second we'll get all the information we require to make a decision
-        GetConditionalAttributes();
-
-
-
-        //then we decide what action to take
-        choiceAction enemyDecision = EnemyDecideAction();
-        return enemyDecision;
-    }
-
+    #region calculatingWeights
     private void EnemyCalculateHealing()
     {
         if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.fleeConsideration == modifierStates.neverBehaviour)
@@ -114,6 +118,7 @@ public class EnemyResponse : MonoBehaviour
             if (enemyHealth < enemyMaxHealth / 4) decisionWeightFlee += 2;    //if enemy under 1/4 health, add another 2 points
         }
     }
+
     private void EnemyCalculateAction()
     {
         //Each decision has a float from 0 to 10. Higher the float, the more likely it is to be picked.
@@ -127,10 +132,13 @@ public class EnemyResponse : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region calculateAction
     private choiceAction EnemyDecideAction()
     {
 
-
+        //if a behaviourmodifier is active and telling enemy to use only one move, do that then.
         if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.attackConsideration == modifierStates.certaintyBehaviour)
             return choiceAction.attack;
         if (enemyRef.GetComponent<CombatAttributes>().behaviourModifier.healConsideration == modifierStates.certaintyBehaviour)
@@ -170,6 +178,7 @@ public class EnemyResponse : MonoBehaviour
         return choiceAction.attack;
     }
 
+    #endregion
 
     private bool CheckAllowEnemyFlee()
     {
@@ -178,25 +187,6 @@ public class EnemyResponse : MonoBehaviour
             return true;   //allow fleeing
         else
             return false;   //disallow fleeing
-    }
-
-   
-
-    private void GetConditionalAttributes()
-    {
-        playerHealth = playerRef.GetComponent<CombatAttributes>().GetHealth();
-        playerMaxHealth = playerRef.GetComponent<CombatAttributes>().GetMaxHealth();
-        playerIsChargingAttack = false; //unimplemented
-        enemyHealth = enemyRef.GetComponent<CombatAttributes>().GetHealth();
-        enemyMaxHealth = enemyRef.GetComponent<CombatAttributes>().GetMaxHealth();
-        enemyIsChargingAttack = false; //unimplemented
-        enemyConsiderFleeing = CheckAllowEnemyFlee(); //check if fleeing the battle is an option or not.
-        enemyHealsPassively = false; //unimplemented
-    }
-
-    private void PrintdecisionStats()
-    {
-        Debug.Log("FLEE: " + decisionWeightFlee + "  ATTCK: " + decisionWeightAttack + "  HEAL: " + decisionWeightHeal);
     }
 
 

@@ -56,20 +56,20 @@ public class PlayerInput : MonoBehaviour
     {
         int currentSpecialAbilityStat = 0;
 
-        for (int i = 0; i < GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility.Length; i++)
+        for (int i = 0; i < GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility.Length; i++)
         {
-            if (GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[i])
+            if (GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[i])
                 currentSpecialAbilityStat++;
         }
 
         Debug.Log("NEW SPECIAL ABILITY ELEMENT: " + currentSpecialAbilityStat);
-        if (currentSpecialAbilityStat < GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility.Length)
-            GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[currentSpecialAbilityStat] = true;
+        if (currentSpecialAbilityStat < GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility.Length)
+            GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[currentSpecialAbilityStat] = true;
     }
 
     public void SetPlayerButtonsClickable(bool newClickableState)
     {
-        if (GetComponent<MasterBattleManager>().turnsUntilPlayerSpecialAllowed <= 0)
+        if (GetComponent<MasterBattleManager>().GetTurnsUntilPlayerSpecialAllowed() <= 0)
         {
             playerSpecialButton.interactable = newClickableState;
             playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Use Special Move");
@@ -77,7 +77,7 @@ public class PlayerInput : MonoBehaviour
         else
         {
             playerSpecialButton.interactable = false;
-            playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Special Move Unavailable \n Unlocks in: " + GetComponent<MasterBattleManager>().turnsUntilPlayerSpecialAllowed);
+            playerSpecialButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Special Move Unavailable \n Unlocks in: " + GetComponent<MasterBattleManager>().GetTurnsUntilPlayerSpecialAllowed());
         }
 
         HandleSpecialAbilitiesButtonsAvailability();
@@ -91,7 +91,7 @@ public class PlayerInput : MonoBehaviour
         playerSpecialMovesCanvas.SetActive(false);
 
         //change button text and interactability depending if at full health
-        if (GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().GetIsAtFullHealth())
+        if (GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().GetIsAtFullHealth())
         {
             playerHealButton.GetComponentInChildren<TextMeshProUGUI>().SetText("You're at \n Full Health");
             playerHealButton.interactable = false;
@@ -106,10 +106,10 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleSpecialAbilitiesButtonsAvailability()
     {
-        playerScareButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[0];
-        playerGlueButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[1];
-        playerTrickButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[2];
-        playerBleederButton.interactable = GetComponent<MasterBattleManager>().playerRef.GetComponent<CombatAttributes>().hasSpecialAbility[3];
+        playerScareButton.interactable = GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[0];
+        playerGlueButton.interactable = GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[1];
+        playerTrickButton.interactable = GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[2];
+        playerBleederButton.interactable = GetComponent<MasterBattleManager>().GetPlayerRef().GetComponent<CombatAttributes>().hasSpecialAbility[3];
 
 
         //this is really bad. Each special ability should be a scriptable object, but it's kinda too late to go back now...

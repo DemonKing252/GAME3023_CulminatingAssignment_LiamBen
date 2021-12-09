@@ -17,14 +17,18 @@ public class CombatAttributes : MonoBehaviour
 
     #endregion
 
+    #region specialAbility
     [SerializeField]
     public bool[] hasSpecialAbility = { false, false, false, false };    //this array corresponds to whether player has unlocked specific specialAbilities. Order is as follows: Scare, Glue, Trick, Bleeder (same order as is seen in choiceAction's specials)
+    #endregion
 
-
+    #region behaviourModifiers
+    [Header("Behaviour Modifier Refs")]
     [SerializeField]
     public CombatAttributeModifier defaultBehaviourModifier;
     [SerializeField]
     public CombatAttributeModifier behaviourModifier;
+    #endregion
 
     #region healthVars
     [Header("Health Vars")]
@@ -50,8 +54,6 @@ public class CombatAttributes : MonoBehaviour
     protected float likelihoodOfReceivedCriticalHit = 0.2f;     //how likely the opponent's attack is to land a critical hit (does extra damage) (>= 1 for awlays, <= 0 for never)
     [SerializeField]
     public float likelihoodOfDodgeAttempt = 0.3f;             //how likely the monster is to dodge player's attack (>= 1 for always, <= 0 for never)
-    [SerializeField]
-    protected float criticalHitReceivedMultiplier = 1.5f;       //how much the crittical hit attack should be multiplied
     #endregion
 
     #region dodging
@@ -72,17 +74,6 @@ public class CombatAttributes : MonoBehaviour
             return false;                         
     }
 
-    //public bool RollDiceForDodgeAttempt()                                  
-    //{
-
-    //    float diceRoll = Random.Range(0.0f, 1.0f);
-
-    //    if (diceRoll <= likelihoodOfDodgeAttempt)
-    //        return true;
-    //    else
-    //        return false;
-    //}
-
     public void SetAttemptDodgeAttack(bool b)
     {
         attemptDodgeAttack = b;
@@ -94,52 +85,13 @@ public class CombatAttributes : MonoBehaviour
     }
     #endregion
 
-    #region combatDealVars
+    #region combatDealDamage
     [Header("Combat Deal Vars")]
     [SerializeField]
     protected float damageDealNormal = 1.0f;            //how much damage to deal during a normal attack
-
-    [SerializeField]
-    protected float damageDealSpecial = 2.0f;           //how much damage to deal during a special attack (will want to move this to another script for specific abilities)
-
-    protected int specialWindUp = 0;                    //how much a special attack has currently wound up (WILL NEED TO REDO THIS)
-
-    [SerializeField]
-    protected int specialWindUpRequiredForAttack = 1;   //minimum amount of windup for special attack (WILL NEED TO REDO THIS)
-
-    [SerializeField]
-    protected int specialWindUpCapacity = 1;            //maximum amount of windup for special attack (WILL NEED TO REDO THIS)
-
     public float GetDamageDealNormal()
     {
         return damageDealNormal;
-    }
-
-    public float GetDamageDealSpecial()
-    {
-        return damageDealSpecial;
-    }
-
-    public int GetSpecialWindUp()
-    {
-        return specialWindUp;
-    }
-
-    public bool GetSpecialAttackAllowed()
-    {
-        if (specialWindUp >= specialWindUpRequiredForAttack) return true;
-        else return false;
-    }
-
-    public void SpecialWindUpReset()
-    {
-        specialWindUp = 0;
-    }
-
-    public void WindUpSpecial()     //allows special attack to wind up in power. Each time chosen, damage of special attack (when finally used) increases.
-    {
-        if (specialWindUp < specialWindUpCapacity)
-            specialWindUp++;
     }
     #endregion
 
@@ -170,7 +122,6 @@ public class CombatAttributes : MonoBehaviour
         return successFleeingChance;
     }
     #endregion
-
 
     #region animation
     public bool GetShouldPlayDamageReceivedAnim()
