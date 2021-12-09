@@ -52,16 +52,16 @@ public class OurAudioSource : MonoBehaviour
         switch (newTrack)
         {
             case Track.Menu:
-                StartCoroutine(FadeBetweenTracks(mainMenuClip, overworldClip, 1f, newTrack));
+                StartCoroutine(FadeBetweenTracks(mainMenuClip, overworldClip, 0.5f, newTrack));
                 break;
             case Track.OverworldFromMenu:
-                StartCoroutine(FadeBetweenTracks(overworldClip, mainMenuClip, 1f, newTrack));
+                StartCoroutine(FadeBetweenTracks(overworldClip, mainMenuClip, 0.5f, newTrack));
                 break;
             case Track.Battle:
-                StartCoroutine(FadeBetweenTracks(battleClip, overworldClip, 1f, newTrack));
+                StartCoroutine(FadeBetweenTracks(battleClip, overworldClip, 0.5f, newTrack));
                 break;
             case Track.OverworldFromBattle:
-                StartCoroutine(FadeBetweenTracks(overworldClip, battleClip, 1f, newTrack));
+                StartCoroutine(FadeBetweenTracks(overworldClip, battleClip, 0.5f, newTrack));
                 break;
         }
 

@@ -55,7 +55,7 @@ public class UIParticleBurst : MonoBehaviour
                     bursts[i + innerBurstCount].SetActive(true);
 
                 float angle = ((float)(i - innerBurstCount) / (float)(outterBurstCount)) * 360f;
-                bursts[i + innerBurstCount].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad), speed * Mathf.Sin(angle * Mathf.Deg2Rad));
+                bursts[i + innerBurstCount].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad) * Time.deltaTime, speed * Mathf.Sin(angle * Mathf.Deg2Rad) * Time.deltaTime);
                 bursts[i + innerBurstCount].transform.localScale = Vector3.Lerp(Vector3.one * 0.1f, Vector3.one, time / (lifeTime + 0.3f));
             }
             yield return null;
@@ -82,7 +82,7 @@ public class UIParticleBurst : MonoBehaviour
                     bursts[i].SetActive(true);
 
                 float angle = ((float)i / (float)innerBurstCount) * 360f;
-                bursts[i].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad), speed * Mathf.Sin(angle * Mathf.Deg2Rad));
+                bursts[i].transform.position += new Vector3(speed * Mathf.Cos(angle * Mathf.Deg2Rad) * Time.deltaTime, speed * Mathf.Sin(angle * Mathf.Deg2Rad) * Time.deltaTime);
                 bursts[i].transform.localScale = Vector3.Lerp(Vector3.one * 0.1f, Vector3.one * 0.6f, time / (lifeTime + 0.3f));
             }
             yield return null;
